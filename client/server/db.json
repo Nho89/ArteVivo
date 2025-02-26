@@ -27,21 +27,6 @@
       "course": "Pintura",
       "role": "student",
       "enrollment_status": "active"
-    },
-    {
-      "id": "4e35",
-      "name": "Mani",
-      "lastname": "hehehee",
-      "email": "mani@gmail.com",
-      "password": "Adgjljgcf1234*",
-      "course": "Escultura",
-      "role": "student",
-      "enrollment_status": "active"
-    },
-    {
-      "id": "5577",
-      "email": "mani@gmail.com",
-      "password": "Adgjljgcf1234*"
     }
   ],
   "roles": [
