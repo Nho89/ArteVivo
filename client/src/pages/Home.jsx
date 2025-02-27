@@ -1,9 +1,10 @@
 import courseData from "../courseData";  
-import Course from "../components/Course";  
+import Course from "../components/Course";
+
 
 export default function Home() {
     return (
-        <div className="container">
+        <div className="container" style={{backgroundColor: "rgb(253, 230, 222)" }}>
             <h1 className="text-center mt-4">Available Courses</h1>
             <div className="row d-flex flex-wrap justify-content-start">
                 {courseData.map(course => (

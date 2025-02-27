@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import headImg from '../assets/Rectangle 12.png'
 
 export default function Navbar() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ borderBottom: '4px solid #A35401', boxShadow: '0 2px 5px rgba(139, 69, 19, 0.6)' }}>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-0"  style={{backgroundImage:`url(${headImg})`, backgroundSize:'cover', backgroundPosition: 'center' ,minHeight: '150px' }}>
             <div className="container">
-                <Link className="navbar-brand" to="/">Artevivo</Link>
+                <Link className="navbar-brand" to="/" style={{color: 'white', fontSize:'45px'}}>Artevivo</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
