@@ -1,5 +1,6 @@
 # ArteVivo
 <img src="https://img.freepik.com/foto-gratis/collage-cinco-sentidos_23-2150009307.jpg?t=st=1740954784~exp=1740958384~hmac=d84fb79d36a8f4179222fc60b2652d010ebf306ae329090a5c0c8cdb9f10b322&w=1380" width="300" alt="Pinceles de arte" />
+
 ## Index
 
 + [Description](#description)
