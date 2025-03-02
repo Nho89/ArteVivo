@@ -1,12 +1,14 @@
 import courseData from "../courseData";  
 import Course from "../components/Course";
 import AcademySection from "../components/AcademySection";
+import Header from "../components/Header";
 
 
 export default function Home() {
     return (
        
         <div style={{boxSizing:'border-box', backgroundColor: "rgb(253, 230, 222)"}}>
+            <Header />
             <AcademySection />
         <div className="container d-flex flex-column align-items-center" style={{ backgroundColor: "rgb(253, 230, 222)" ,padding:'20px'}}>
             <h1 className="text-center">Available Courses</h1>

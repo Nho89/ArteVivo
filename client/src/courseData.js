@@ -15,7 +15,7 @@ const courseData = [
         id: 3,
         img: "https://www.city-academy.com/staticresources/uploads/1626169692.jpg",
         name: "Photography",
-        description: "Master CSS with Flexbox, Grid, animations, and responsive design."
+        description: "La fotografía es un arte, pero... ¿Te imaginas revelar tus propias fotografías? Este curso te enseñará todo el proceso.."
     }
 ];
 
