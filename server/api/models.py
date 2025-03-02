@@ -9,6 +9,9 @@ class User(models.Model):
     email = models.CharField(max_length=255)
     id_role = models.ForeignKey('Role', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 class Role(models.Model):
     """Model definition for Role."""
     id_role = models.AutoField(primary_key=True)
@@ -19,12 +22,17 @@ class Role(models.Model):
         ('librarian', 'Librarian'),
         ('guest', 'Guest'),
     ])  # Coordinate roles and access levels with the team.
-
+    def __str__(self):
+        return self.get_name_display()
+    
 class Course(models.Model):
     """Model definition for Course."""
     id_course = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 class Enrollment(models.Model):
     """Model definition for Enrollment."""
@@ -38,6 +46,8 @@ class Enrollment(models.Model):
         ('dropped', 'Dropped'),
         ('paused', 'Paused'),
     ])  # Coordinate the statuses with the team.
+    def __str__(self):
+        return f'{self.id_user} - {self.id_course}'
 
 class Book(models.Model):
     """Model definition for Book."""    
@@ -47,6 +57,9 @@ class Book(models.Model):
     stock = models.IntegerField()
     books_in_use = models.IntegerField()
 
+    def __str__(self):
+        return self.title
+
 class BooksAssigned(models.Model):
     """Model definition for BooksAssigned."""
     id_books_assigned = models.AutoField(primary_key=True)
@@ -55,3 +68,6 @@ class BooksAssigned(models.Model):
     id_book = models.ForeignKey('Book', on_delete=models.CASCADE)
     is_read = models.BooleanField(default=False)
     assigned_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.id_user} - {self.id_book}'
