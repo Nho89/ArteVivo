@@ -15,7 +15,10 @@ const Register = () => {
 
   useEffect(() => {
   getCourses() 
-    .then(response => setCourses(response)) 
+    .then(response => {
+      console.log(response);
+      setCourses(response);
+    })
     .catch(error => console.error('Error al obtener los cursos:', error));
 }, []);
 
@@ -24,8 +27,9 @@ const Register = () => {
     try {
       const newUser = {
         ...data,
-        role: "student", 
+        role: 1, 
         enrollment_status: "active",
+        // course: 2,
       };
       const response = await userRegister(newUser);
       localStorage.setItem('token', response.token);
@@ -46,15 +50,15 @@ const Register = () => {
 
         <div className="input-group">
           <label>Nombre</label>
-          <input disabled={isLoading} type="text" placeholder="Nombre" {...register('name', { maxLength: 50 })} />
+          <input disabled={isLoading} type="text" placeholder="Nombre" {...register('username', { maxLength: 50 })} />
           {errors.name?.type === "maxLength" && <p>Máximo 50 caracteres</p>}
         </div>
 
-        <div className="input-group">
+        {/* <div className="input-group">
           <label>Apellido</label>
-          <input disabled={isLoading} type="text" placeholder="Apellido" {...register('lastname', { maxLength: 50 })} />
+          <input disabled={isLoading} type="text" placeholder="Apellido" {...register('last_name', { maxLength: 50 })} />
           {errors.lastname?.type === "maxLength" && <p>Máximo 50 caracteres</p>}
-        </div>
+        </div> */}
 
         <div className="input-group">
           <label>Email</label>
@@ -69,7 +73,7 @@ const Register = () => {
           {errors.password?.type === "pattern" && <p>Debe tener 8 caracteres, una mayúscula, un número y un símbolo.</p>}
         </div>
 
-        <div className="input-group">
+        {/* <div className="input-group">
           <label>Selecciona un curso</label>
           <select id="course" disabled={isLoading} {...register('course')}>
             <option value="">-- Selecciona un curso --</option>
@@ -83,7 +87,7 @@ const Register = () => {
               ))
             )}
           </select>
-        </div>
+        </div> */}
 
         <button className="register-button" disabled={isLoading} type="submit">Enviar</button>
         <button className="cancel-button" type="button" onClick={() => navigate('/')}>Cancelar</button>
