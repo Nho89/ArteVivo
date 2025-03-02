@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 db.json
-server/db.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
