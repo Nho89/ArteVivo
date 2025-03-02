@@ -1,82 +1,41 @@
-from django.db import models
+from django.db import models 
 
+# Modelos Base
 class Role(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
-    
-    def __str__(self):
-        return self.name
+    name = models.CharField(max_length=50, unique=True)  # SuperAdmin, Profesor, Alumno
 
-class Teacher(models.Model):
-    id_teacher = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+class User(models.Model):  
+    username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
-    
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+    password = models.CharField(max_length=255)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
+# Modelo de Cursos
 class Course(models.Model):
-    id_course = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
     description = models.TextField()
-    id_teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.name
+    professor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, limit_choices_to={'role__name': 'Profesor'})
 
-class Student(models.Model):
-    ENROLLMENT_STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
-        ('suspended', 'Suspended'),
-    ]
-    
-    id_student = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    enrollment_status = models.CharField(max_length=20, choices=ENROLLMENT_STATUS_CHOICES)
-    
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
+# Modelo de Libros
 class Book(models.Model):
-    STATUS_CHOICES = [
-        ('available', 'Available'),
-        ('unavailable', 'Unavailable'),
-    ]
-    
-    AVAILABILITY_CHOICES = [
-        ('in_stock', 'In Stock'),
-        ('out_of_stock', 'Out of Stock'),
-        ('on_order', 'On Order'),
-    ]
-    
-    id_book = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
-    author = models.CharField(max_length=200)
-    id_course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    availability = models.CharField(max_length=20, choices=AVAILABILITY_CHOICES)
-    
-    def __str__(self):
-        return self.title
+    author = models.CharField(max_length=100)
+    quantity_available = models.IntegerField(default=0)  
 
+# Inscripciones de Estudiantes a Cursos
 class Enrollment(models.Model):
-    STATUS_CHOICES = [
-        ('enrolled', 'Enrolled'),
-        ('completed', 'Completed'),
-        ('dropped', 'Dropped'),
-    ]
-    
-    id_enrollment = models.AutoField(primary_key=True)
-    id_student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    id_course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    
-    class Meta:
-        unique_together = ('id_student', 'id_course')
-        
-    def __str__(self):
-        return f"{self.id_student} - {self.id_course}"
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'Alumno'})
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=[('Inscrito', 'Inscrito'), ('Aprobado', 'Aprobado'), ('No aprobado', 'No aprobado')], default='Inscrito')
+
+# Relación de Libros Obligatorios por Curso
+class CourseBook(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+
+# Préstamo de Libros a Estudiantes
+class StudentBook(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'Alumno'})
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    borrowed_at = models.DateTimeField(auto_now_add=True)
+    returned_at = models.DateTimeField(null=True, blank=True)
