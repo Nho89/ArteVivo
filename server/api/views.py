@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBook
-from .serializer import UserSerializer, RoleSerializer, CourseSerializer, BookSerializer, EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer
+from .serializers import UserSerializer, RoleSerializer, CourseSerializer, BookSerializer, EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer
 
 class RoleViewSet(viewsets.ModelViewSet):
     queryset = Role.objects.all()
