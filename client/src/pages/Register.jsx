@@ -4,6 +4,7 @@ import { useUserContext } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { userRegister } from '../services/userServices.js';
 import axios from 'axios';
+import Header from '../components/Header.jsx';
 const Register = () => {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +40,9 @@ const Register = () => {
   }
 
   return (
-    <div>
+    
+    <div style={{backgroundColor: "rgb(253, 230, 222)", padding:"20px"}}>
+      <Header />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <input disabled={isLoading} type="text" placeholder="Nombre" {...register('name', { maxLength: 50 })} />
