@@ -8,24 +8,24 @@ export default function Course() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const data = await getCourses(); // Llamamos al servicio para obtener los cursos
-                setCourses(data); // Actualizamos el estado con los cursos obtenidos
+                const data = await getCourses(); 
+                setCourses(data); 
             } catch (err) {
                 setError("Error al obtener los cursos");
                 console.error(err);
             } finally {
-                setLoading(false); // Finalmente, cambiamos el estado de carga a falso
+                setLoading(false); 
             }
         };
 
-        fetchCourses(); // Llamamos a la función de obtener los cursos al iniciar el componente
+        fetchCourses(); 
     }, []);
     if (loading) {
-        return <div>Cargando cursos...</div>; // Muestra un mensaje mientras carga
+        return <div>Cargando cursos...</div>; 
     }
 
     if (error) {
-        return <div>{error}</div>; // Muestra el mensaje de error si hubo algún problema
+        return <div>{error}</div>; 
     }
     return (
         <>
