@@ -11,7 +11,7 @@ export default function Home() {
             <Header />
             <AcademySection />
         <div className="container d-flex flex-column align-items-center" style={{ backgroundColor: "rgb(253, 230, 222)" ,padding:'20px'}}>
-            <h1 className="text-center">Available Courses</h1>
+            <h3 className="text-center">Available Courses</h3>
 
             <div className="row w-100">
                 {courseData.map((course, index) => (
@@ -28,13 +28,13 @@ export default function Home() {
                             <p>{course.description}</p>
                             <button className="btn" style={{ 
                                 backgroundColor: 'transparent', 
-                                border: '2px solid #A35401', 
+                                
                                 padding: '10px 20px', 
                                 borderRadius: '5px', 
                                 color: '#A35401', 
                                 fontWeight: 'bold' 
                             }}>
-                                Learn More
+                                Ver mas →
                             </button>
                         </div>
                     </div>
