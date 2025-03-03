@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import {useParams} from "react-router-dom"
+import {Navigate, useNavigate, useParams} from "react-router-dom"
 import { getCourseById } from '../services/courseServices.js';
 import './CourseDetails.css';
 const CourseDetails = () => {
   const { id } = useParams();  
   const [course, setCourse] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) { 
@@ -41,8 +42,8 @@ const CourseDetails = () => {
       <div className="course-actions">
         {/* <p>Fecha: </p>
         <p>Disponibilidad:</p> */}
-        <button className="btn-student">Inscribirme como Alumno</button>
-        <button className="btn-professor">Inscribirme como Profesor</button>
+        <button className="btn-student" onClick={()=>navigate('/register')}>Inscribirme como Alumno</button>
+        <button className="btn-professor" onClick={()=>navigate('/registerTeacher')}>Inscribirme como Profesor</button>
       </div>
     </div>
   )

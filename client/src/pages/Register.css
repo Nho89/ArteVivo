@@ -10,9 +10,10 @@
 
 .register-content {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    height: 78vh;
+    height: auto;
+    min-height: 73vh;
 }
 
 .titleForm{
@@ -31,16 +32,23 @@
     font-weight: bold;
 }
 .register-form {
+    
     background-color: #D2DFF1;
     padding: 2rem;
     border-radius: 10px 0 0 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    width: 90%;
+    /* width: 90%; */
     max-width: 450px;
     text-align: center;
 }
 
-
+.register-form,
+.img_form {
+    flex: 1;
+    /* Ambos elementos ocupan el mismo espacio */
+    display: flex;
+    flex-direction: column;
+}
 .input-group {
     margin-bottom: 15px;
     text-align: left;
@@ -92,16 +100,18 @@
 
 
 .img_form {
+    width: 100%;
     max-width: 400px;
     height: auto;
     border-radius: 0 10px 10px 0;
-    height: 73vh;
+    min-height: 100%;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
 }
 
 .text_form{
     text-align: left;
-    font-size: 14px;
+    font-size: 12px;
     color: #1F2124;
     font-weight: bold;
 }

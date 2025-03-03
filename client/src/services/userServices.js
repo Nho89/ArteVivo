@@ -19,3 +19,12 @@ export const userRegister = async (userData) => {
         throw error;
     }
 }
+
+export const getUserById = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL}${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

@@ -11,6 +11,8 @@ import StudentDetails from "../pages/StudentDetails";
 import RegisterTeacher from "../pages/RegisterTeacher";
 // import ErrorBoundary from './components/ErrorBoundary.jsx'
 import CourseDetails from "../pages/CourseDetails";
+import ProfilePage from "../pages/ProfilePage";
+import SuperadminPage from "../pages/SuperadminPage";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -38,12 +40,12 @@ const router = createBrowserRouter([
                 element: <CourseDetails/>
             },
             {
-                path: "studentPage",
-                element: <StudentPage/>
+                path: "profilePage",
+                element: <ProfilePage/>
             },
             {
-                path: "teacherPage",
-                element: <TeacherPage/>
+                path: "superadminPage",
+                element: <SuperadminPage/>
             },
             {
                 path: "pageBooks",
