@@ -39,8 +39,8 @@ const CourseDetails = () => {
         {course.url ? <img src={course.url} alt={course.name} /> : <p>Imagen no disponible</p>}
       </div>
       <div className="course-actions">
-        <p>Fecha: </p>
-        <p>Disponibilidad:</p>
+        {/* <p>Fecha: </p>
+        <p>Disponibilidad:</p> */}
         <button className="btn-student">Inscribirme como Alumno</button>
         <button className="btn-professor">Inscribirme como Profesor</button>
       </div>
