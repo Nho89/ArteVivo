@@ -1,11 +1,14 @@
-from django.db import models
+from django.db import models 
 
 # Modelos Base
 class Role(models.Model):
     name = models.CharField(max_length=50, unique=True)  # SuperAdmin, Profesor, Alumno
 
 class User(models.Model):  
+
     username = models.CharField(max_length=100, unique=True)
+    first_name = models.CharField(max_length=100, null=False)
+    last_name = models.CharField(max_length=100, null=False)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
