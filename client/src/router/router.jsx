@@ -28,7 +28,7 @@ const router = createBrowserRouter([
                 element: <Register/>
             },
             {
-                path: "registerTeacher",
+                path: "/registerTeacher",
                 element: <RegisterTeacher/>
             },
             {
@@ -40,19 +40,19 @@ const router = createBrowserRouter([
                 element: <CourseDetails/>
             },
             {
-                path: "profilePage",
+                path: "/profilePage",
                 element: <ProfilePage/>
             },
             {
-                path: "superadminPage",
+                path: "/superadminPage",
                 element: <SuperadminPage/>
             },
             {
-                path: "pageBooks",
+                path: "/pageBooks",
                 element: <PageBooks/>
             },
             {
-                path: "studentDetails",
+                path: "/studentDetails",
                 element: <StudentDetails/>
             }
         ]

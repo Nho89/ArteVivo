@@ -20,10 +20,37 @@ export const userRegister = async (userData) => {
     }
 }
 
+export const getUsers = async () =>{
+    try {
+        const response = await axios.get(`${API_URL}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getUserById = async (id) => {
     try {
         const response = await axios.get(`${API_URL}${id}`);
         return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getUsersByRole = async (role) => {
+    try {
+        const response = await axios.get(`${API_URL}?role=${role}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    
+}}
+
+export const deleteUser = async (id, token) => {
+    try {
+        const headers = { 'Authorization': `Bearer ${token}` }
+        const response = await axios.delete(`${API_URL}${id}`, { headers });
     } catch (error) {
         throw error;
     }
