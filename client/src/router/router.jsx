@@ -8,6 +8,7 @@ import StudentPage from "../pages/StudentPage";
 import TeacherPage from "../pages/TeacherPage";
 import PageBooks from "../pages/PageBooks";
 import StudentDetails from "../pages/StudentDetails";
+import RegisterTeacher from "../pages/RegisterTeacher";
 // import ErrorBoundary from './components/ErrorBoundary.jsx'
 import CourseDetails from "../pages/CourseDetails";
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
                 element: <Register/>
             },
             {
+                path: "registerTeacher",
+                element: <RegisterTeacher/>
+            },
+            {
                 path: "/login",
                 element: <Login/>
             },
@@ -32,12 +37,6 @@ const router = createBrowserRouter([
                 path: "/course_details/:courseId",
                 element: <CourseDetails/>
             },
-        ]
-    },
-    {
-        path: "/dashboard",
-        element: <LayoutPrivate />,
-        children: [
             {
                 path: "studentPage",
                 element: <StudentPage/>
@@ -54,7 +53,29 @@ const router = createBrowserRouter([
                 path: "studentDetails",
                 element: <StudentDetails/>
             }
-        ]}
+        ]
+    },
+    // {
+    //     path: "/dashboard",
+    //     element: <LayoutPrivate />,
+    //     children: [
+    //         {
+    //             path: "studentPage",
+    //             element: <StudentPage/>
+    //         },
+    //         {
+    //             path: "teacherPage",
+    //             element: <TeacherPage/>
+    //         },
+    //         {
+    //             path: "pageBooks",
+    //             element: <PageBooks/>
+    //         },
+    //         {
+    //             path: "studentDetails",
+    //             element: <StudentDetails/>
+    //         }
+    //     ]}
     ]);
      
 export default router;
