@@ -17,7 +17,7 @@ export const getCourseById = async (id) => {
     const response = await axios.get(`${API_URL}${id}`);
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error('Error al obtener el curso:', error);
     throw error;
   }
 };
