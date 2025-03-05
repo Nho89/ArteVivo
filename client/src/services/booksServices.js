@@ -6,7 +6,7 @@ const API_URL = 'http://127.0.0.1:8000/api';
 
 export const getAllBooks = async () => {
     try {
-        const response = await axios.get(`${API_URL}`);
+        const response = await axios.get(`${API_URL}/books/`);
         return response.data;
     } catch (error) {
         console.error(error);

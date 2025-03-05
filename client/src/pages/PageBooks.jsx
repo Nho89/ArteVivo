@@ -13,20 +13,29 @@ const PageBooks = () => {
     const fetchBooks = async () => {
       try {
         const data = await getAllBooks();
-        setBooks(data);
+        console.log("Datos recibidos:", data); // 🔹 Verifica qué devuelve
+        if (Array.isArray(data)) {
+          setBooks(data);
+        } else {
+          console.error("Error: La respuesta no es un array", data);
+          setBooks([]); // Evita que books sea undefined
+        }
       } catch (error) {
         console.error("Error al obtener los libros:", error);
+        setBooks([]); // Si hay un error, evita el fallo
       }
     };
     fetchBooks();
   }, []);
 
   // Filtrar libros por búsqueda
-  const filteredBooks = books.filter(
-    (book) =>
-      book.title.toLowerCase().includes(search.toLowerCase()) ||
-      book.author.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredBooks = Array.isArray(books)
+    ? books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(search.toLowerCase()) ||
+          book.author.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   // Ordenar libros dinámicamente
   const sortedBooks = [...filteredBooks].sort((a, b) => {
@@ -78,20 +87,17 @@ const PageBooks = () => {
         </div>
       </section>
 
-
-<section className="books-table-section">
-  
-
-      {/* Barra de búsqueda */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar libro"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <FaSearch className="search-icon" />
-      </div>
+      <section className="books-table-section">
+        {/* Barra de búsqueda */}
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar libro"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <FaSearch className="search-icon" />
+        </div>
 
         <table className="books-table">
           <thead>
