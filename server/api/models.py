@@ -18,6 +18,7 @@ class Course(models.Model):
     name = models.CharField(max_length=100)
     url = models.URLField(null=True, blank=True)
     description = models.TextField()
+    url = models.URLField(null=True, blank=True)
     professor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, limit_choices_to={'role__name': 'Profesor'})
 
 # Modelo de Libros

@@ -58,15 +58,20 @@ const Register = () => {
               
     
               <div className="input-group">
-                <label>Nombre</label>
-                <input disabled={isLoading} type="text" placeholder="Nombre" {...register('username', { maxLength: 50 })} />
+                <label>Nombre de usuario</label>
+                <input disabled={isLoading} type="text" placeholder="Nombre de usuario" {...register('username', { maxLength: 50 })} />
                 {errors.username?.type === "maxLength" && <p>Máximo 50 caracteres</p>}
               </div>
-              {/* <div className="input-group">
-              <label>Apellido</label>
-              <input disabled={isLoading} type="text" placeholder="Apellido" {...register('last_name', { maxLength: 50 })} />
-              {errors.lastname?.type === "maxLength" && <p>Máximo 50 caracteres</p>}
-            </div> */}
+              <div className="input-group">
+                <label>Nombre</label>
+                <input disabled={isLoading} type="text" placeholder="Nombre" {...register('first_name', { maxLength: 50 })} />
+                {errors.lastname?.type === "maxLength" && <p>Máximo 50 caracteres</p>}
+              </div>
+                <div className="input-group">
+                <label>Apellido</label>
+                <input disabled={isLoading} type="text" placeholder="Apellido" {...register('last_name', { maxLength: 50 })} />
+                {errors.lastname?.type === "maxLength" && <p>Máximo 50 caracteres</p>}
+              </div>
               <div className="input-group">
                 <label>Email</label>
                 <input disabled={isLoading} type="email" placeholder="Email" {...register('email', { required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ })} required />

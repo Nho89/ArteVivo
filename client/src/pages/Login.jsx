@@ -13,17 +13,23 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (data) => {
+    console.log("Datos enviados:", data); 
     try {
       setIsLoading(true);
       setLoginError('');
       const response = await login(data);
       if (response) {
-        localStorage.setItem('token', response.token);
+        // localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.user_role);
         setUserAuth(true);
         setUser(response.user_name);
         setUserRole(response.user_role);
-        navigate('/dashboard');
+
+        if (response.user_role === 1 || response.user_role === 2){
+          navigate('/profilePage');
+        } else if (response.user_role === 3){
+          navigate('/superadminPage');
+        }
       }
     } catch (error) {
       setLoginError(error.response?.data?.error || 'Error al iniciar sesión');
