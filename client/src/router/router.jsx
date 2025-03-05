@@ -4,13 +4,12 @@ import Register from "../pages/Register";
 import LayoutPublic from "../layout/LayoutPublic";
 import LayoutPrivate from "../layout/LayoutPrivate";
 import Login from "../pages/Login";
-import StudentPage from "../pages/StudentPage";
-import TeacherPage from "../pages/TeacherPage";
 import PageBooks from "../pages/PageBooks";
 import StudentDetails from "../pages/StudentDetails";
 import RegisterTeacher from "../pages/RegisterTeacher";
-// import ErrorBoundary from './components/ErrorBoundary.jsx'
 import CourseDetails from "../pages/CourseDetails";
+import ProfilePage from "../pages/ProfilePage";
+import SuperadminPage from "../pages/SuperadminPage";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -26,7 +25,7 @@ const router = createBrowserRouter([
                 element: <Register/>
             },
             {
-                path: "registerTeacher",
+                path: "/registerTeacher",
                 element: <RegisterTeacher/>
             },
             {
@@ -34,23 +33,23 @@ const router = createBrowserRouter([
                 element: <Login/>
             },
             {
-                path: "/course_details/:courseId",
+                path: "/course_details/:id",
                 element: <CourseDetails/>
             },
             {
-                path: "studentPage",
-                element: <StudentPage/>
+                path: "/profilePage/:rol",
+                element: <ProfilePage/>
             },
             {
-                path: "teacherPage",
-                element: <TeacherPage/>
+                path: "/superadminPage",
+                element: <SuperadminPage/>
             },
             {
-                path: "pageBooks",
+                path: "/pageBooks",
                 element: <PageBooks/>
             },
             {
-                path: "studentDetails",
+                path: "/studentDetails",
                 element: <StudentDetails/>
             }
         ]
