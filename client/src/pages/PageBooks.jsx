@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllBooks } from "../services/booksServices";
+import { getAllBooks, updateBookAvailability } from "../services/booksServices";
 import "../pages/PageBooks.css";
 import { FaSearch } from "react-icons/fa";
 
@@ -27,6 +27,25 @@ const PageBooks = () => {
     };
     fetchBooks();
   }, []);
+
+  
+  const handleRequestBook = async (book) => {
+    if (book.quantity_available > 0) {
+        try {
+            const newQuantity = book.quantity_available - 1;
+            await updateBookAvailability(book.id, newQuantity);
+
+            // Actualizar el estado local para reflejar la nueva disponibilidad
+            setBooks(books.map(b => 
+                b.id === book.id ? { ...b, quantity_available: newQuantity } : b
+            ));
+        } catch (error) {
+            console.error("Error al solicitar el libro:", error);
+        }
+    } else {
+        alert("No hay copias disponibles");
+    }
+};
 
   // Filtrar libros por búsqueda
   const filteredBooks = Array.isArray(books)
@@ -136,7 +155,12 @@ const PageBooks = () => {
                 <td>{book.author}</td>
                 <td>{book.quantity_available}</td>
                 <td>
-                  <button disabled>Préstamo</button>
+                  <button
+                    onClick={() => handleRequestBook(book)}
+                    disabled={book.quantity_available === 0}
+                  >
+                    Préstamo
+                  </button>
                   <button disabled>Comprar</button>
                 </td>
               </tr>
