@@ -3,11 +3,3 @@
 
 
 
-pip install djangorestframework-simplejwt
-{
-  "username": "Maryna",
-  "password": "Google Classroom"
-}{
-  "username": "Maryna",
-  "password": "Google Classroom"
-}

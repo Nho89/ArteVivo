@@ -36,11 +36,11 @@ class StudentBookViewSet(viewsets.ModelViewSet):
 
 class LoginAPIView(APIView):
     def post(self, request):
-        # Сериализуем данные из запроса
-        serializer = LoginSerializer(data=request.data)
+       
+        serializer = LoginSerializer(data=request.data) # Serialize data from request
 
-        # Если данные валидны
-        if serializer.is_valid():
+        
+        if serializer.is_valid():# If data is valid 
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
