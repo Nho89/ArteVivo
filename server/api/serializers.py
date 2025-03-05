@@ -44,7 +44,9 @@ class StudentBookSerializer(serializers.ModelSerializer):
         model = StudentBook
         fields = '__all__'
 
+        # Generamos JWT tokens
 class LoginSerializer(serializers.Serializer):
+
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
@@ -52,18 +54,20 @@ class LoginSerializer(serializers.Serializer):
         username = data.get("username")
         password = data.get("password")
 
-        print(f"Attempting to authenticate user: {username}")
-        user = authenticate(username=username, password=password)
-        if user is None:
-            print("Authentication failed")
+               
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
             raise serializers.ValidationError("Invalid username or password")
-        print("Authentication successful")
+         
+         # Generamos JWT tokens
         refresh = RefreshToken.for_user(user)
-        # print(f"USUARIO: {user}")
+        print(f"USUARIO: {user}")
 
         return {
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-            "user_id": user.id,
-            #"role_id": user.role,
+             "access": str(refresh.access_token),
+             "refresh": str(refresh),
+             "user_id": user.id,
+             "role_id": user.role.id if user.role else None,
         }
+    
