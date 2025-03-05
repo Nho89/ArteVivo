@@ -21,3 +21,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),  # Conectamos las URLs de la API
 ]
+
