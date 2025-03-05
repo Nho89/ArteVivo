@@ -1,0 +1,17 @@
+.home-container {
+    box-sizing: border-box;
+     background-color: rgb(253, 230, 222);
+ }
+
+ .main-container {
+    background-color: rgb(253, 230, 222) ;
+    padding:20px;
+ }
+
+ .link-btn {
+    background-color: transparent; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    color: #A35401; 
+    font-weight: bold;
+ }

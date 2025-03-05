@@ -2,15 +2,16 @@ import courseData from "../courseData";
 import Course from "../components/Course";
 import AcademySection from "../components/AcademySection";
 import Header from "../components/Header";
+import "./home.css";
 
 
 export default function Home() {
     return (
        
-        <div style={{boxSizing:'border-box', backgroundColor: "rgb(253, 230, 222)"}}>
+        <div className="home-container">
             <Header />
             <AcademySection />
-        <div className="container d-flex flex-column align-items-center" style={{ backgroundColor: "rgb(253, 230, 222)" ,padding:'20px'}}>
+        <div className="container d-flex flex-column align-items-center main-container" >
             <h3 className="text-center">Available Courses</h3>
 
             <div className="row w-100">
@@ -26,14 +27,7 @@ export default function Home() {
                         <div style={{ width: "50%", padding: "10px" }}>
                             <h3>{course.name}</h3>
                             <p>{course.description}</p>
-                            <button className="btn" style={{ 
-                                backgroundColor: 'transparent', 
-                                
-                                padding: '10px 20px', 
-                                borderRadius: '5px', 
-                                color: '#A35401', 
-                                fontWeight: 'bold' 
-                            }}>
+                            <button className="btn link-btn">
                                 Ver mas →
                             </button>
                         </div>

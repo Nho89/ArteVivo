@@ -1,0 +1,15 @@
+
+head {
+    background-image: url('../assets//Rectangle-2.png');
+          background-size: cover;
+          background-position: center;
+          min-height: 120px;
+          width: 100%;
+}
+h1 {
+    color: white;
+    font-size: 45px;
+    text-align: center;
+    width: 100%;
+}
+

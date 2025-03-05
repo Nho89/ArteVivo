@@ -1,0 +1,40 @@
+.carousel-inner .carousel-item img {
+    width: 200%;
+    max-height: 200px;
+    object-fit: contain;
+  }
+
+  .custom-paraf {
+    font-size:0.4em; 
+    width:35%; 
+    padding: 10px;
+  }
+  
+  .custom-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 30px;
+    flex-wrap: wrap; 
+  }
+ 
+  .carousel-container {
+    width: 40%;
+    max-width: 500px; 
+    margin: 0 auto; 
+  }
+
+
+  .carousel img {
+    width: 70%;
+    height:150px; 
+  }
+  
+  .carousel-item {
+    text-align: center; 
+  }
+
+  .custom-header {
+    text-align: right;
+    padding: 0 60px;
+  }
