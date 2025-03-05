@@ -1,0 +1,50 @@
+@import url("https://fonts.google.com/share?selection.family=Playfair+Display:ital,wght@0,400..900;1,400..900");
+
+*{
+   font-family: "Playfair Display", serif;
+   box-sizing: border-box;
+}
+.home-container {
+    box-sizing: border-box;
+     background-color: rgb(253, 230, 222);
+ }
+
+ .main-container {
+    background-color: rgb(253, 230, 222) ;
+    padding:20px;
+ }
+
+ .link-btn {
+    background-color: transparent; 
+    padding: 0 20px; 
+    border-radius: 5px; 
+    color: rgb(244, 174, 112); 
+    font-weight: bold;
+    border: none;
+ }
+
+.link-btn:hover{
+   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+   color:rgb(244, 174, 112);
+}
+
+ .course-img-container {
+   width: 50%;
+ }
+
+
+ .course.img {
+   border-radius: 8px; 
+   width: 100%; 
+ }
+ 
+.description-paraf {
+   
+   font-size: 0.7em;
+   padding: 8px 8px;
+ }
+.course-title {
+   font-size: 0.9em;
+   text-align: center;
+
+}

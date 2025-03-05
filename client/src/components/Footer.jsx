@@ -1,26 +1,25 @@
 import React from 'react'
 import logoImg from "../assets/logowhite.png"
 import { Link } from 'react-router-dom';
-
+import "./footer.css"
 const Footer = () => {
   return (
-    <div style={{display: "flex" ,flexDirection:"row",justifyContent:"space-around",backgroundColor:"#333333", padding:"20px", color:"white"}}>
+    <div className="footer-container">
 
-        <div style={{backgroundColor:"#333333", color:"white"}}>
+        <div className="logo-container">
           <img src={logoImg} alt="logo artevivo" width="30" />
-          <p style={{color:"rgb(244, 174, 112)" , fontSize:"0.5em"}}>©2025 ArteVivo.  <span style={{color:"white"}}>All rights reserved.</span>Privacy Policy.</p>
+          <p className="logo-caption">©2025 ArteVivo.  <span className='logo-span'>All rights reserved.</span>Privacy Policy.</p>
+        </div>
+
+        <div>
+                <Link className="resource-link" to="/dashboard/studentPage">Nosotros</Link>
+                <Link className="resource-link" to="/dashboard/teacherPage">Cursos</Link>
+                <Link className="resource-link" to="/dashboard/pageBooks">Quiero ser Profesor</Link>
         </div>
 
       <div>
-      
-                <Link className="nav-link" to="/dashboard/studentPage" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Nosotros</Link>
-                <Link className="nav-link" to="/dashboard/teacherPage" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Cursos</Link>
-                <Link className="nav-link" to="/dashboard/pageBooks" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Quiero ser Profesor</Link>
-      </div>
-
-      <div>
-       <Link className="nav-link" to="/dashboard/teacherPage" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Libros</Link>
-       <Link className="nav-link" to="/dashboard/pageBooks" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Mis spacio</Link>
+       <Link className="resource-link" to="/dashboard/teacherPage">Libros</Link>
+       <Link className="resource-link" to="/dashboard/pageBooks">Mis spacio</Link>
       </div>
 
       

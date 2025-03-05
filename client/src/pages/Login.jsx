@@ -1,57 +1,67 @@
-import React, {useState} from 'react'
-import {useForm} from 'react-hook-form'
-import {useNavigate} from'react-router-dom';
-import {login} from '../services/userServices';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../services/userServices';
 import { useUserContext } from '../context/UserContext';
+import '../pages/Login.css';
 
 const Login = () => {
-  const[isLoading, setIsLoading] = useState(false);
-  const {handleSubmit, register, errors} = useForm();
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleSubmit, register } = useForm();
   const [loginError, setLoginError] = useState('');
   const { setUserAuth, setUser, setUserRole } = useUserContext();
   const navigate = useNavigate();
 
-const handleLogin = async (data) => {
-  try {
-    setIsLoading(true);
-    setLoginError();
-    const response = await login(data);
-    if (response) {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('role', response.user_role)
-      setUserAuth(true);
-      setUser(response.user_name);
-      setUserRole(response.user_role);
-      navigate('/dashboard');
-    }
-  } catch (error) {
-    setLoginError(error.response.data.error);
-    setIsLoading(false);
-  }
-}
+  const handleLogin = async (data) => {
+    console.log("Datos enviados:", data); 
+    try {
+      setIsLoading(true);
+      setLoginError('');
+      const response = await login(data);
+      if (response) {
+        // localStorage.setItem('token', response.token);
+        localStorage.setItem('role', response.user_role);
+        setUserAuth(true);
+        setUser(response.user_name);
+        setUserRole(response.user_role);
 
+        if (response.user_role === 1 || response.user_role === 2){
+          navigate('/profilePage');
+        } else if (response.user_role === 3){
+          navigate('/superadminPage');
+        }
+      }
+    } catch (error) {
+      setLoginError(error.response?.data?.error || 'Error al iniciar sesión');
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <>
-    <div>
-      <h2>Iniciar Sesión:</h2>
-      <form action="" onSubmit={handleSubmit(handleLogin)}>
-        <input disabled={isLoading} {...register("email", { required: true })} type="email" id="email" placeholder="Email" required className="" />
-
-          <div className="relative">
-            <input disabled={isLoading} {...register("password", { required: true })} id="password" placeholder="Contraseña" required className="" />
-            
-          </div>
-          
-          <button disabled={isLoading} type="submit" className="">
-            Acceder
-          </button>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit(handleLogin)}>
+        <h2>Iniciar Sesión</h2>
+        {loginError && <p className="error-message">{loginError}</p>}
+        <input
+          disabled={isLoading}
+          {...register("email", { required: true })}
+          type="email"
+          placeholder="Email"
+          className="login-input"
+        />
+        <input
+          disabled={isLoading}
+          {...register("password", { required: true })}
+          type="password"
+          placeholder="Contraseña"
+          className="login-input"
+        />
+        <button disabled={isLoading} type="submit" className="login-button">
+          {isLoading ? 'Cargando...' : 'Acceder'}
+        </button>
       </form>
     </div>
-    
-    
-    </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

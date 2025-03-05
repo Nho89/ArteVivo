@@ -27,6 +27,21 @@
       "course": "Pintura",
       "role": "student",
       "enrollment_status": "active"
+    },
+    {
+      "id": "2810",
+      "name": "prueba",
+      "lastname": "d",
+      "email": "prieba@gmail.com",
+      "password": "Prueba123@",
+      "course": "Historia del Arte",
+      "role": "student",
+      "enrollment_status": "active"
+    },
+    {
+      "id": "18ec",
+      "email": "prieba@gmail.com",
+      "password": "Prueba123@"
     }
   ],
   "roles": [
