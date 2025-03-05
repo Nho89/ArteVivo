@@ -47,10 +47,10 @@ export const getUsersByRole = async (role) => {
     
 }}
 
-export const deleteUser = async (id, token) => {
+export const deleteUser = async (id) => {
     try {
-        const headers = { 'Authorization': `Bearer ${token}` }
-        const response = await axios.delete(`${API_URL}${id}`, { headers });
+        // const headers = { 'Authorization': `Bearer ${token}` }
+        const response = await axios.delete(`${API_URL}${id}`);
     } catch (error) {
         throw error;
     }
