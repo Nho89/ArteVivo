@@ -1,7 +1,19 @@
+@import url("https://fonts.google.com/share?selection.family=Playfair+Display:ital,wght@0,400..900;1,400..900");
+
+*{
+   font-family: "Playfair Display", serif;
+   box-sizing: border-box;
+}
+
 .carousel-inner .carousel-item img {
     width: 200%;
     max-height: 200px;
     object-fit: contain;
+  }
+
+  .custom-wrap {
+    background-color: "rgb(253, 230, 222)";
+     padding:"30px 30px 30px 30px";
   }
 
   .custom-paraf {
@@ -9,6 +21,8 @@
     width:35%; 
     padding: 10px;
   }
+
+
   
   .custom-container {
     display: flex;
@@ -31,7 +45,8 @@
   }
   
   .carousel-item {
-    text-align: center; 
+    text-align: center;
+    object-fit: fill; 
   }
 
   .custom-header {

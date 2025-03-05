@@ -17,7 +17,7 @@ const CustomComponent = () => {
   return (
     
     
-      <div  style={{ backgroundColor: "rgb(253, 230, 222)", padding:"30px 0 30px 0"}}>
+      <div  className="custom-wrap">
       
      
            <h3 className="custom-header">

@@ -1,0 +1,7 @@
+.btn {
+    background-color: transparent;
+    padding: 10px 20px;  
+    color: rgb(244, 174, 112);
+    text-decoration: none;
+    display: inline-block;
+}

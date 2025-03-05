@@ -6,14 +6,7 @@ export default function Header() {
         className="navbar navbar-expand-lg navbar-light"
         >
 
-        <h1
-          style={{
-            color: 'white',
-            fontSize: '45px',
-            textAlign: 'center',
-            width: '100%'
-          }}
-        >
+        <h1>
           Artevivo
         </h1>
       </head>

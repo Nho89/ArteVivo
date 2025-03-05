@@ -21,13 +21,13 @@ export default function Home() {
                         className={`col-md-12 mb-4 d-flex ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`} 
                         style={{ alignItems: "center" }}
                     >
-                        <div style={{ width: "50%" }}>
-                            <img src={course.img} className="img-fluid" alt={course.name} style={{ borderRadius: "8px", width: "100%" }} />
+                        <div className="course-img-container">
+                            <img src={course.img} className="img-fluid course.img" alt={course.name} />
                         </div>
                         <div style={{ width: "50%", padding: "10px" }}>
-                            <h3>{course.name}</h3>
-                            <p>{course.description}</p>
-                            <button className="btn link-btn">
+                            <h5 className="course-title">{course.name}</h5>
+                            <p className="description-paraf">{course.description}</p>
+                            <button className="link-btn">
                                 Ver mas →
                             </button>
                         </div>
