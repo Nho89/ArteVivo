@@ -3,6 +3,7 @@
 *{
    font-family: "Playfair Display", serif;
    box-sizing: border-box;
+   margin: 0;
 }
 
 .carousel-inner .carousel-item img {
@@ -14,6 +15,8 @@
   .custom-wrap {
     background-color: "rgb(253, 230, 222)";
      padding:"30px 30px 30px 30px";
+     margin: 0;
+     box-sizing: border-box;
   }
 
   .custom-paraf {

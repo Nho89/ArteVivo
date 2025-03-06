@@ -5,6 +5,7 @@ import pOne from "../assets/pOne.jpg"
 import pTwo from "../assets/pTwo.jpg"
 import { Carousel } from 'react-bootstrap';
 import "./custom.css"
+import Navbar from './Navbar';
 
 
 const CustomComponent = () => {
@@ -19,7 +20,6 @@ const CustomComponent = () => {
     
       <div  className="custom-wrap">
       
-     
            <h3 className="custom-header">
             ♦ NUESTRA ACADEMIA ♦
            </h3>

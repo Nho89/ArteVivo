@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    
+}
+
+
+.footer-container {
+    display: flex;
+    
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 30px;
+    background-color: #333333;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.logo-container {
+    text-align: center;
+    color: rgb(253, 230, 222);
+    font-size: 0.6em;
+}
+.flex-item{
+    color: rgb(253, 230, 222);
+    font-size: 0.6em;
+    justify-content: center;
+
+}
+
+
+
+.resource-link{
+    display: block;
+    color:rgb(253, 230, 222);
+}
+
+

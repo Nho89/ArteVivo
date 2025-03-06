@@ -1,12 +1,16 @@
 @import url("https://fonts.google.com/share?selection.family=Playfair+Display:ital,wght@0,400..900;1,400..900");
 
 *{
-   font-family: "Playfair Display", serif;
-   box-sizing: border-box;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  box-sizing: border-box;
+  margin: 0;
+
 }
 
 .ac-sec-bar {
-    background-color:#333333; 
+    background-color: #333333;
     height:30px; 
     margin:0 30px;
  }
@@ -28,6 +32,7 @@
     font-size: 0.9em;
      padding: 10px 10px;
      display: block;
+     
 }
 
 .title-link:hover {

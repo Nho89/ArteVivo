@@ -1,6 +1,7 @@
 import CustomComponent from "./CustomComponent";
 import { Link } from 'react-router-dom';
 import "./academy-section.css"
+
 export default function AcademySection() {
     return (
         <div style={{}}>

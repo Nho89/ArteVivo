@@ -7,6 +7,12 @@
 .home-container {
     box-sizing: border-box;
      background-color: rgb(253, 230, 222);
+     margin: 0;
+ }
+
+ .main-title {
+   padding: 8px;
+
  }
 
  .main-container {
@@ -35,11 +41,10 @@
 
  .course.img {
    border-radius: 8px; 
-   width: 100%; 
+   width: 70%; 
  }
  
 .description-paraf {
-   
    font-size: 0.7em;
    padding: 8px 8px;
  }

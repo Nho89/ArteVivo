@@ -3,16 +3,18 @@ import Course from "../components/Course";
 import AcademySection from "../components/AcademySection";
 import Header from "../components/Header";
 import "./home.css";
-
+import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function Home() {
     return (
        
         <div className="home-container">
             <Header />
+            <Navbar />
             <AcademySection />
         <div className="container d-flex flex-column align-items-center main-container" >
-            <h3 className="text-center">Available Courses</h3>
+            <h3 className="text-center main-title">Available Courses</h3>
 
             <div className="row w-100">
                 {courseData.map((course, index) => (
@@ -27,9 +29,9 @@ export default function Home() {
                         <div style={{ width: "50%", padding: "10px" }}>
                             <h5 className="course-title">{course.name}</h5>
                             <p className="description-paraf">{course.description}</p>
-                            <button className="link-btn">
+                            <Link className="link-btn" to="/courses">
                                 Ver mas →
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 ))}
