@@ -1,7 +1,34 @@
-.btn {
-    background-color: transparent;
-    padding: 10px 20px;  
-    color: rgb(244, 174, 112);
-    text-decoration: none;
-    display: inline-block;
-}
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: transform 0.3s;
+  }
+  
+  .course-container {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding: 20px;
+    background: transparent;
+    text-align: center;
+    
+  }
+  
+  .main-container:nth-child(odd) {
+    transform: translateX(-20px);
+  }
+  
+  .main-container:nth-child(even) {
+    transform: translateX(20px);
+  }
+  .course-img-container {
+    align-items: center;
+    background-color: black;
+  }
+  
+  .course-img-container img {
+    width: 200px;
+    height: 200px;
+  }
+  

@@ -1,29 +1,26 @@
+// components/Course.jsx
+
+import React from 'react';
+import { Link } from 'react-router-dom';
 import "./course.css"
 
-
 export default function Course({ img, name, description }) {
-    return (
-        <div className="card shadow-sm p-3 mb-4 bg-white rounded">
-            <img src={img} className="card-img-top" alt={name} />
-            <div className="card-body">
-                <h3 className="card-title">{name}</h3>
-                <p className="card-text description-paraf">{description}</p>
-                <a 
-                    href="/path-to-course-page" 
-                    className="btn" 
-                    style={{ 
-                        backgroundColor: 'transparent', 
-                        padding: '10px 20px',  
-                        color: '#A35401', 
-                        fontWeight: 'bold',
-                        textDecoration: 'none',
-                        display: 'inline-block',
+  return (
+    <div className='main-container'>
+    <div className="course-container">
 
-                    }}
-                >
-                    Learn More
-                </a>
-            </div>
-        </div>
-    );
+      <div className="course-img-container">
+        <img src={img} className="img-fluid" alt={name} />
+      </div>
+      <div className="course-details">
+        <h5 className="course-title">{name}</h5>
+        <p className="description">{description}</p>
+        <Link className="course-btn link-btn">More Info → </Link>
+      </div>
+
+
+    </div>
+
+    </div>
+  );
 }

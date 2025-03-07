@@ -2,12 +2,14 @@ import CustomComponent from "./CustomComponent";
 import { Link } from 'react-router-dom';
 import "./academy-section.css"
 
+
 export default function AcademySection() {
     return (
-        <div style={{}}>
+        <div>
 
            <CustomComponent />
-      
+
+          
             <div className="ac-sec-bar"></div>
 
              <div className="ac-sec-container">
@@ -23,6 +25,7 @@ export default function AcademySection() {
                   </p>
 
               </div>
+              
 
 
         </div>
