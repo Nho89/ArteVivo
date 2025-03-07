@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RoleViewSet, UserViewSet, CourseViewSet, BookViewSet, EnrollmentViewSet, CourseBookViewSet, StudentBookViewSet, LoginAPIView
+from .views import RoleViewSet, UserViewSet, CourseViewSet, BookViewSet, EnrollmentViewSet, CourseBookViewSet, StudentBookViewSet
+from .views import LoginAPIView
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,

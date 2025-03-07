@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getUsersByRole, deleteUser } from '../services/userServices';
+import { getUsersByRole, deleteUser, updateUser } from '../services/userServices';
 import { getCourses } from '../services/courseServices';
 import { getAllBooks } from '../services/booksServices';
 import { useUserContext } from '../context/UserContext';
@@ -12,7 +12,12 @@ const SuperadminPage = () => {
     const [booksData, setBooksData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
+    const [editingUserId, setEditingUserId] = useState(null);
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        role: ''
+    });
     const fetchData = async (role) => {
         setLoading(true);
         setError('');
@@ -48,7 +53,29 @@ const SuperadminPage = () => {
             console.error('Error eliminando usuario', err);
         }
     };
-
+    
+    const handleEditUser = (user) => {
+        setEditingUserId(user.id);
+        setFormData({
+            username: user.username,
+            email: user.email,
+            role: user.role
+        });
+    };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+    const handleUpdateUser = async (e) => {
+        e.preventDefault();
+        try {
+            await updateUser(editingUserId, formData);
+            setUserData(userData.map(user => (user.id === editingUserId ? { ...user, ...formData } : user)));
+            setEditingUserId(null);
+        } catch (err) {
+            console.error('Error actualizando usuario', err);
+        }
+    };
     return (
         <div className='panel_admin'>
             <div className='list_panel'><ul>
@@ -83,8 +110,38 @@ const SuperadminPage = () => {
                                         user.role === 3 ? 'Administrador' : 'Rol desconocido'}</td>
                                     <td>{user.email}</td>
                                     <td>
-                                        <button>Actualizar</button>
-                                        <button onClick={() => handleDeleteUser(user.id)}>Eliminar</button>
+                                        {editingUserId === user.id ? (
+                                            <form onSubmit={handleUpdateUser}>
+                                                <input
+                                                    type="text"
+                                                    name="username"
+                                                    value={formData.username}
+                                                    onChange={handleChange}
+                                                />
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    value={formData.email}
+                                                    onChange={handleChange}
+                                                />
+                                                <select
+                                                    name="role"
+                                                    value={formData.role}
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="1">Estudiante</option>
+                                                    <option value="2">Profesor</option>
+                                                    <option value="3">Administrador</option>
+                                                </select>
+                                                <button type="submit">Guardar</button>
+                                                <button type="button" onClick={() => setEditingUserId(null)}>Cancelar</button>
+                                            </form>
+                                        ) : (
+                                            <>
+                                                <button onClick={() => handleEditUser(user)}>Actualizar</button>
+                                                <button onClick={() => handleDeleteUser(user.id)}>Eliminar</button>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

@@ -35,46 +35,31 @@ const router = createBrowserRouter([
             {
                 path: "/course_details/:id",
                 element: <CourseDetails/>
-            },
+            }
+            
+        ]
+    },
+    {
+        path: "/dashboard",
+        element: <LayoutPrivate />,
+        children: [
             {
-                path: "/profilePage/:rol",
+                path: "profilePage/:id",
                 element: <ProfilePage/>
             },
             {
-                path: "/superadminPage",
+                path: "superadminPage",
                 element: <SuperadminPage/>
             },
             {
-                path: "/pageBooks",
+                path: "pageBooks",
                 element: <PageBooks/>
             },
             {
-                path: "/studentDetails",
+                path: "studentDetails",
                 element: <StudentDetails/>
             }
-        ]
-    },
-    // {
-    //     path: "/dashboard",
-    //     element: <LayoutPrivate />,
-    //     children: [
-    //         {
-    //             path: "studentPage",
-    //             element: <StudentPage/>
-    //         },
-    //         {
-    //             path: "teacherPage",
-    //             element: <TeacherPage/>
-    //         },
-    //         {
-    //             path: "pageBooks",
-    //             element: <PageBooks/>
-    //         },
-    //         {
-    //             path: "studentDetails",
-    //             element: <StudentDetails/>
-    //         }
-    //     ]}
+        ]}
     ]);
      
 export default router;

@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCourses } from "../services/courseServices"; 
+
 export default function Course() {
     const [courses, setCourses] = useState([]); 
     const [error, setError] = useState(null);   
     const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -20,6 +22,7 @@ export default function Course() {
 
         fetchCourses(); 
     }, []);
+
     if (loading) {
         return <div>Cargando cursos...</div>; 
     }
@@ -27,11 +30,12 @@ export default function Course() {
     if (error) {
         return <div>{error}</div>; 
     }
+
     return (
         <>
             {courses.map((course) => (
                 <div key={course.id} className="card shadow-sm p-3 mb-4 bg-white rounded">
-                    <img src={course.url} className="card-img-top" alt={course.name} />
+                    <img src={course.url} className="card-img-top" alt={course.name} style={{ width: '100%', height: 'auto' }} /> {/* Asegúrate de que las imágenes se ajusten al contenedor */}
                     <div className="card-body">
                         <h3 className="card-title">{course.name}</h3>
                         <p className="card-text">{course.description}</p>
@@ -51,6 +55,5 @@ export default function Course() {
                 </div>
             ))}
         </>
-        
     );
 }
