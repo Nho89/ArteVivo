@@ -1,0 +1,36 @@
+.nav-container {
+    background-color: #333333;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.nav-links-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #333333;
+}
+.nav-logo {
+    height: 40px;
+    /* Ajusta el tamaño del logo */
+    width: auto;
+}
+.nav-link {
+    text-decoration: none;
+    color: #ffffff !important;
+    /* Forzar el color blanco */
+    font-size: 16px;
+    /* Aumentar el tamaño de la fuente */
+    padding: 10px 20px;
+    /* Ajustar el padding */
+    transition: color 0.3s ease, background-color 0.3s ease;
+    display: block;
+    border-radius: 5px;
+}
+
+.nav-link:hover {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: rgb(244, 174, 112) !important;
+    /* Forzar el color en hover */
+}
