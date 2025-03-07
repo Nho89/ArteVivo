@@ -14,10 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'role', 'first_name', 'last_name']
-        extra_kwargs = {'password': {'write_only': True}}
-    # def create(self, validated_data):
-    #     validated_data['password'] = make_password(validated_data['password']) 
-    #     return super().create(validated_data)   
+        extra_kwargs = {'password': {'write_only': True}}   
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
