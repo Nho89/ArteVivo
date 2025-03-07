@@ -44,6 +44,9 @@ class CourseBookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudentBookSerializer(serializers.ModelSerializer):
+    student_books = BookSerializer(many=True, read_only=True, source="studentbook_set")
+
+
     class Meta:
         model = StudentBook
         fields = '__all__'
@@ -52,7 +55,7 @@ class StudentBookSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
 
     username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField()
 
     def validate(self, data):
         username = data.get("username")

@@ -1,15 +1,18 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBook
-from .serializers import UserSerializer, RoleSerializer, CourseSerializer, BookSerializer, EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer, LoginSerializer
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.shortcuts import render, get_object_or_404, redirect
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
+from django.http import JsonResponse
+from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBook
+from .serializers import (
+    UserSerializer, RoleSerializer, CourseSerializer, BookSerializer,
+    EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer, LoginSerializer
+)
+
+
 
 
 #Vistas basadas en clases
@@ -29,30 +32,40 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-    @action(detail=True, methods=['patch'])
-    def update_availability(self, request, pk=None):
+    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated])
+    def loan(self, request, pk=None):
         try:
-            book = self.get_object()
-            new_availability = request.data.get("quanttity_available")
-            
-            if new_availability is not None and isinstance(new_availability, int):
-                if new_availability >= 0:
-                    book.quantity_available = new_availability
-                    book.save()
-                    return Response(
-                        {"message": "Disponibilidad actualizada correctamente", "quantity_available": book.quantity_available},
-                        status=status.HTTP_200_OK
-                    )
-                return Response(
-                        {"message": "La disponibilidad no puede ser negativa"},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-            return Response(
-                        {"message": "La disponibilidad debe ser un número entero"},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
+            book = self.get_object()  # Obtenemos el libro
+            user = request.user  # Obtenemos el usuario autenticado
+
+            # Verificamos si el usuario tiene el rol de "Alumno"
+            if user.role.id != 1:  # 1 es el rol de estudiante
+                return JsonResponse({"message": "El usuario no tiene permisos para realizar este préstamo."}, status=403)
+
+            if book.quantity_available > 0:  # Verificamos que haya disponibilidad
+                # Actualizamos la disponibilidad del libro
+                book.quantity_available -= 1
+                book.save()
+
+                # Registramos el préstamo del libro en StudentBook
+                student_book = StudentBook.objects.create(
+                    student=user,  # Usamos el usuario autenticado como estudiante
+                    book=book,
+                )
+
+                return JsonResponse({
+                    "message": "Préstamo realizado con éxito",
+                    "book_title": book.title,
+                    "student": user.username,
+                    "borrowed_at": student_book.borrowed_at
+                }, status=200)
+            else:
+                return JsonResponse({"message": "No hay copias disponibles"}, status=400)
+
+        except Book.DoesNotExist:
+            return JsonResponse({"message": "Libro no encontrado"}, status=404)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": str(e)}, status=500)
 
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
@@ -60,22 +73,34 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
     serializer_class = EnrollmentSerializer
 
     def create(self, request, *args, **kwargs):
-        """Cuando un estudiante se inscribe, disminuye la cantidad disponible de los libros del curso."""
-        response = super().create(request, *args, **kwargs)  # Llamamos al método original para crear la inscripción
-        
-        if response.status_code == 201:  # Si se creó correctamente
+        response = super().create(request, *args, **kwargs)
+        if response.status_code == 201:
             course_id = request.data.get("course")
-            student_id = request.data.get("student")
-            
-            if course_id and student_id:
+            if course_id:
                 course_books = CourseBook.objects.filter(course_id=course_id)
                 for course_book in course_books:
                     book = course_book.book
                     if book.quantity_available > 0:
                         book.quantity_available -= 1
                         book.save()
-            
         return response
+
+@api_view(['GET'])
+def get_books_by_student(request, student_id):
+    books = StudentBook.objects.filter(student_id=student_id).select_related('book')
+    books_data = [
+        {
+            "id": loan.book.id,
+            "title": loan.book.title,
+            "author": loan.book.author,
+            "borrow_date": loan.borrow_date,
+            "due_date": loan.due_date,
+            "status": loan.status,
+            "mandatory": loan.mandatory,
+        }
+        for loan in books
+    ]
+    return JsonResponse(books_data, safe=False)
 
 class CourseBookViewSet(viewsets.ModelViewSet):
     queryset = CourseBook.objects.all()
@@ -86,19 +111,14 @@ class StudentBookViewSet(viewsets.ModelViewSet):
     serializer_class = StudentBookSerializer
 
 class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
-       
-        serializer = LoginSerializer(data=request.data) 
+        serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-
-
 #Vistas basadas en funciones:
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_users(request):
@@ -209,10 +229,3 @@ def delete_book(request, id):
     book = get_object_or_404(Book, pk=id)
     book.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
-
-class LoginAPIView(APIView):
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
