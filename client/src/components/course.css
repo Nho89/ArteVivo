@@ -1,34 +1,65 @@
 .main-container {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     gap: 20px;
-    transition: transform 0.3s;
-  }
-  
-  .course-container {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    padding: 20px;
-    background: transparent;
-    text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
     
   }
   
-  .main-container:nth-child(odd) {
-    transform: translateX(-20px);
+  .course-container {
+    max-width: 300px;
+    margin-bottom: 20px;
+    background-color: transparent;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   
+   
   }
   
-  .main-container:nth-child(even) {
-    transform: translateX(20px);
-  }
-  .course-img-container {
-    align-items: center;
-    background-color: black;
+  .course-img-container{
+    width: 200px;
+    height: 200px;
+    
+    
   }
   
   .course-img-container img {
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
+  
+  .course-details {
+    padding: 10px;
+    max-width: 200px;
+    
+  }
+  
+  .course-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .description {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .course-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .course-container:hover {
+    transform: translateY(-5px);
+  }
+  
+ 
   

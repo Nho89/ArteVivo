@@ -16,7 +16,8 @@
     background-color: "rgb(253, 230, 222)";
      padding:"30px 30px 30px 30px";
      margin: 0;
-     box-sizing: border-box;
+     box-sizing: border-box; 
+     max-width: 100%;
   }
 
   .custom-paraf {
@@ -32,7 +33,7 @@
     flex-direction: row;
     justify-content: space-around;
     padding: 30px;
-    flex-wrap: wrap; 
+    flex-wrap: wrap; max-width: 100%;
     
   }
  
