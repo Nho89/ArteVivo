@@ -42,6 +42,18 @@ export const updateBook = async (id, data) => {
     }
 }
 
+export const updateBookAvailability = async (id, newQuantity) => {
+    try {
+        const response = await axios.patch(`${API_URL}/books/${id}/update_availability/`, {
+            quantity_available: newQuantity
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error al actualizar disponibilidad:", error);
+        throw error;
+    }
+};
+
 export const deleteBook = async (id) => {
     try {
         // const headers = { 'Authorization': `Bearer ${token}` }
