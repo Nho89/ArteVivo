@@ -60,3 +60,12 @@ export const updateCourse= async (id, data, token) => {
     }
   }
 };
+export const enrollInCourse = async (userId, courseId) => {
+    try {
+        const response = await axios.post(`${API_URL}${courseId}/enroll/`, { user_id: userId });
+        return response.data;
+    } catch (error) {
+        console.error('Error al inscribirse en el curso:', error);
+        throw error;
+    }
+};

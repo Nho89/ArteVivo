@@ -1,0 +1,106 @@
+.profile-page {
+    padding: 20px;
+    margin-bottom: 10%;
+}
+
+.greeting {
+    margin-bottom: 20px;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.student-profile {
+    margin-bottom: 40px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.data-table th,
+.data-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.data-table th {
+    background-color: black;
+    color: white;
+    text-align: left;
+}
+
+.data-table td {
+    background-color: white;
+    color: black;
+}
+
+.enroll-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #FDA285;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.enroll-button:hover {
+    background-color: #E69370;
+}
+
+.unenroll-button {
+    padding: 5px 10px;
+    background-color: #FF6F61;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.unenroll-button:hover {
+    background-color: #E55B50;
+}
+
+.submit-task-button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.submit-task-button:hover {
+    background-color: #45A049;
+}
+
+.return-book-button {
+    padding: 5px 10px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.return-book-button:hover {
+    background-color: #007B9E;
+}
+
+.request-book-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #ADADAD;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.request-book-button:hover {
+    background-color: #8D8D8D;
+}
+
+.books-table th {
+    background-color: #ADADAD;
+    color: white;
+}
