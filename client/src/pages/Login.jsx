@@ -17,18 +17,27 @@ const Login = () => {
     try {
       setIsLoading(true);
       setLoginError('');
-      const response = await login(data);
-      if (response) {
-        // localStorage.setItem('token', response.token);
-        localStorage.setItem('role', response.user_role);
-        setUserAuth(true);
-        setUser(response.user_name);
-        setUserRole(response.user_role);
 
-        if (response.user_role === 1 || response.user_role === 2){
-          navigate('/profilePage');
-        } else if (response.user_role === 3){
-          navigate('/superadminPage');
+      const response = await login(data);
+      console.log('se pasa la data',response);
+
+      if (response) {
+        localStorage.setItem('token', response.access);//guardar el token
+        localStorage.setItem('role', response.role_id);
+        localStorage.setItem('user_id', response.user_id);
+
+        setUserAuth(true);
+        setUser(response.user_id);
+        setUserRole(response.role_id);
+
+        console.log("Rol recibido:", response.role_id);
+        setIsLoading(false);
+
+        if (response.role_id === 1 || response.role_id === 2){
+          navigate(`/dashboard/profilePage/${response.user_id}`);
+        } else if (response.role_id === 3){
+          console.log("Redirigiendo a Superadmin...");
+          navigate('/dashboard/superadminPage');
         }
       }
     } catch (error) {
@@ -44,9 +53,9 @@ const Login = () => {
         {loginError && <p className="error-message">{loginError}</p>}
         <input
           disabled={isLoading}
-          {...register("email", { required: true })}
-          type="email"
-          placeholder="Email"
+          {...register("username", { required: true })}
+          type="username"
+          placeholder="Nombre de usuario"
           className="login-input"
         />
         <input
