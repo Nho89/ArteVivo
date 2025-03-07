@@ -21,8 +21,14 @@ const Login = () => {
       const response = await login(data);
       console.log('se pasa la data',response);
 
-      if (response) {
-        localStorage.setItem('token', response.access);//guardar el token
+      if (response && response.access) {
+        // Limpiar datos previos antes de guardar nuevos valores
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('user_id');
+
+        // Guardar token y datos de usuario
+        localStorage.setItem('token', response.access); // 🔹 Guarda el token
         localStorage.setItem('role', response.role_id);
         localStorage.setItem('user_id', response.user_id);
 
@@ -32,7 +38,8 @@ const Login = () => {
 
         console.log("Rol recibido:", response.role_id);
         setIsLoading(false);
-
+        
+        // Redirección según el rol
         if (response.role_id === 1 || response.role_id === 2){
           navigate(`/dashboard/profilePage/${response.user_id}`);
         } else if (response.role_id === 3){
