@@ -1,6 +1,6 @@
 import React from 'react';
-import logoImg from "../assets/Brown_Black_Modern_Elegant_Letter_AV_Logo.png"
-import starImg from"../assets/starnight.png"
+// import logoImg from "../assets/Brown_Black_Modern_Elegant_Letter_AV_Logo.png"
+// import starImg from"../assets/starnight.png"
 import "./CustomComponent.css";
 
 const CustomComponent = () => {
@@ -21,7 +21,7 @@ const CustomComponent = () => {
                   Figma ipsum component variant main layer. Draft strikethrough export slice stroke selection. Variant overflow image main asset. Bold layout list font layout figjam. Shadow main vertical frame bullet project vector.
                 <br />
                 <img
-                  src={logoImg}
+                  // src={logoImg}
                   alt="logo"
                   width="100"
                   className="object-contain"
@@ -29,7 +29,7 @@ const CustomComponent = () => {
               </p>
 
               <img
-                src={starImg}
+                // src={starImg}
                 alt="Academy Art"
                 className="w-40 md:w-48 max-w-sm object-contain mb-4"
                 style={{ maxHeight: "150px" }}

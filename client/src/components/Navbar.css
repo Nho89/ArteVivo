@@ -1,32 +1,36 @@
 .nav-container {
     background-color: #333333;
-    margin: 0 30px;
+    width: 100%;
+    padding: 10px 0;
 }
 
 .nav-links-container {
-    box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    max-width: 1200px;
-    padding: 0 20px;
+    width: 100%;
     color: #333333;
 }
-
-
-
-
-.source-link {
+.nav-logo {
+    height: 40px;
+    /* Ajusta el tamaño del logo */
+    width: auto;
+}
+.nav-link {
     text-decoration: none;
-    color: rgb(253, 230, 222);
-    font-size: 12px;
-    padding: 10px 15px;
+    color: #ffffff !important;
+    /* Forzar el color blanco */
+    font-size: 16px;
+    /* Aumentar el tamaño de la fuente */
+    padding: 10px 20px;
+    /* Ajustar el padding */
     transition: color 0.3s ease, background-color 0.3s ease;
     display: block;
     border-radius: 5px;
 }
 
-.source-link:hover {
+.nav-link:hover {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    color: rgb(244, 174, 112);
+    color: rgb(244, 174, 112) !important;
+    /* Forzar el color en hover */
 }

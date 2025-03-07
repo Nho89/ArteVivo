@@ -10,10 +10,12 @@
     background-color: rgb(253, 230, 222);
     margin: 0;
 }
-
+.banner-img {
+    width: 100%;
+    height: auto;
+}
 .main-title {
     padding: 8px;
-
 }
 
 .main-container {
@@ -39,8 +41,7 @@
     width: 50%;
 }
 
-
-.course.img {
+.course-img {
     border-radius: 8px;
     width: 70%;
 }
@@ -53,5 +54,4 @@
 .course-title {
     font-size: 0.9em;
     text-align: center;
-
 }
