@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { userRegister } from '../services/userServices.js';
 import './Register.css'; 
 import { getCourses } from '../services/courseServices.js';
-import ImgForm from '../assets/img/imgForm.png';
+import ImgForm from '../assets/img/ImgForm.png';
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
