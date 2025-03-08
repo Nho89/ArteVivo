@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getAllBooks, updateBookAvailability } from "../services/booksServices";
 import "../pages/PageBooks.css";
 import { FaSearch } from "react-icons/fa";
-import { useUserContext } from "../context/UserContext";
 
 const PageBooks = () => {
-  const { user } = useUserContext();
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState("null");
@@ -32,46 +30,22 @@ const PageBooks = () => {
 
   
   const handleRequestBook = async (book) => {
-    const token = localStorage.getItem("token");
-    console.log("Token en localStorage:", token);
-    if (!token) {
-      console.error("No se ha iniciado sesión o el token no está disponible.");
-      return;
-    }
-    if (!user || !user.id) {
-      console.error("No se ha iniciado sesión o el usuario no tiene un ID.");
-      return;
-    }
     if (book.quantity_available > 0) {
-      try {
-        const newQuantity = book.quantity_available - 1;
-  
-        // Actualizar la cantidad disponible del libro
-        await updateBookAvailability(book.id, newQuantity);
-        console.log("Token en localStorage:", token);
+        try {
+            const newQuantity = book.quantity_available - 1;
+            await updateBookAvailability(book.id, newQuantity);
 
-  
-        // Registrar el préstamo del libro
-        await fetch(`http://127.0.0.1:8000/api/books/${book.id}/loan/`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ student_id: user.id }), 
-        });
-  
-        // Actualizar el estado local para reflejar la nueva disponibilidad
-        setBooks(books.map(b => 
-          b.id === book.id ? { ...b, quantity_available: newQuantity } : b
-        ));
-      } catch (error) {
-        console.error("Error al solicitar el libro:", error);
-      }
+            // Actualizar el estado local para reflejar la nueva disponibilidad
+            setBooks(books.map(b => 
+                b.id === book.id ? { ...b, quantity_available: newQuantity } : b
+            ));
+        } catch (error) {
+            console.error("Error al solicitar el libro:", error);
+        }
     } else {
-      alert("No hay copias disponibles");
+        alert("No hay copias disponibles");
     }
-  };
+};
 
   // Filtrar libros por búsqueda
   const filteredBooks = Array.isArray(books)

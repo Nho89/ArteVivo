@@ -17,7 +17,7 @@ const Footer = () => {
           <li><a className='link_footer' href="./register">Quiero aprender</a></li>
         </ul>
         <ul>
-          <li><a className='link_footer' href="./pageBooks">Libros</a></li>
+          <li><a className='link_footer' href="./dashboard/pageBooks">Libros</a></li>
           <li><a className='link_footer' href="./login">Mi espacio</a></li>
           <li><a className='link_footer' href="https://github.com/Nho89/ArteVivo.git">Github</a></li>
         </ul>

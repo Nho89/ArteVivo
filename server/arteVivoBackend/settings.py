@@ -32,7 +32,11 @@ SECRET_KEY = 'django-insecure-!dg3lod49x5rbf#73%^c1@a!(tu!3+!d$4*y*p9n*@qe%%hi@)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'kubernetes.docker.internal',
+]
 
 
 # Application definition
@@ -64,8 +68,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware', 
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:8000", 
+    "http://localhost:5173", 
 ]
 
 ROOT_URLCONF = 'arteVivoBackend.urls'
@@ -147,20 +150,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-from datetime import timedelta
-
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Para usar JWT
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # Solo usuarios autenticados
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #      'rest_framework.permissions.IsAuthenticated',
+    #  )
 }
 
+from datetime import timedelta
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  # Live time of access-token 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),   #  Live time of access-token 
 }
