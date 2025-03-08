@@ -1,6 +1,7 @@
 import React from 'react'
 import './Footer.css' 
 import logo from '../assets/img/logo.png'
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -13,12 +14,12 @@ const Footer = () => {
         <ul>
           <li><a className='link_footer' href="">Nosotros</a></li>
           <li><a className='link_footer' href="./">Cursos</a></li>
-          <li><a className='link_footer' href="./registerTeacher">Quiero ser profesor</a></li>
-          <li><a className='link_footer' href="./register">Quiero aprender</a></li>
+          <li><Link className="link_footer" to="/registerTeacher">Quiero ser profesor</Link></li>
+          <li><Link className="link_footer" to="/register">Quiero aprender</Link></li>
         </ul>
         <ul>
-          <li><a className='link_footer' href="./dashboard/pageBooks">Libros</a></li>
-          <li><a className='link_footer' href="./login">Mi espacio</a></li>
+          <li><Link className="link_footer" to="/dashboard/pageBooks">Libros</Link></li>
+          <li><Link className='link_footer' to="/login">Mi espacio</Link></li>
           <li><a className='link_footer' href="https://github.com/Nho89/ArteVivo.git">Github</a></li>
         </ul>
       </div>

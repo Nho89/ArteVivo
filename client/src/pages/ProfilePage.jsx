@@ -18,10 +18,13 @@ const ProfilePage = () => {
         const fetchUserData = async () => {
             try {
                 const data = await getUserById(id);
+                console.log('Datos del usuario:', data);
                 setUserData(data);
                 setUser(data);
                 setUserRole(data.role);
                 setLoading(false);
+                setCoursesData(data.courses || []);
+                setBooksData(data.books || []);
             } catch (error) {
                 setError("Error al obtener los datos del usuario");
                 setLoading(false);
@@ -37,6 +40,7 @@ const ProfilePage = () => {
       const fetchCoursesData = async () => {
         try {
           const data = await getCourses();
+          console.log('Cursos obtenidos:', data);
           setCoursesData(data);
         } catch (error) {
           setError("Error al obtener los cursos");
@@ -47,6 +51,7 @@ const ProfilePage = () => {
       const fetchBooksData = async () => {
         try {
           const data = await getAllBooks();
+          console.log('Libros:', data);
           setBooksData(data);
         } catch (error) {
           setError("Error al obtener los libros");
@@ -54,10 +59,14 @@ const ProfilePage = () => {
       };fetchBooksData();
     }, []);
     const handleEnroll = async (courseId) => {
+        
+        console.log('Libros:', userData.books);
+
         try {
             await enrollInCourse(user.id, courseId);
             const updatedUserData = await getUserById(user.id);
             setUserData(updatedUserData);
+            setCoursesData(updatedUserData.courses);
         } catch (error) {
             setError("Error al inscribirse en el curso");
         }
@@ -86,20 +95,23 @@ const ProfilePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {userData.enrollments && userData.enrollments.map(enrollment => (
-                                            <tr key={enrollment.id}>
-                                                <td>{enrollment.course.name}</td>
-                                                <td>{enrollment.date}</td>
-                                                <td>{enrollment.status}</td>
+                                        {userData.courses && userData.courses.length > 0 ? (
+                                                userData.courses.map(course => (
+                                            <tr key={course.id}>
+                                                <td>{course.name}</td>
+                                                <td>{course.date}</td>
+                                                <td>{course.status}</td>
                                                 <td>
-                                                    <button className="unenroll-button" onClick={() => handleUnenroll(enrollment.course.id)}>Anular Inscripción</button>
+                                                    <button className="unenroll-button" onClick={() => handleUnenroll(course.id)}>Anular Inscripción</button>
                                                     <button className="submit-task-button">Enviar Tarea</button>
                                                 </td>
                                             </tr>
-                                        ))}
+                                        ))) : (
+                                            <tr><td colSpan="4">No tienes cursos inscritos.</td></tr>
+                                        )}
                                     </tbody>
                                 </table>
-                                <button className="enroll-button" onClick={() => handleEnroll()}>Inscribirme a un Curso</button>
+                                <button className="enroll-button" onClick={() => handleEnroll(course.id)}>Inscribirme a un Curso</button>
                             </div>
 
                             <div className='student-profile'>
@@ -116,15 +128,15 @@ const ProfilePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {userData.student_books && userData.student_books.map(studentBook => (
-                                            <tr key={studentBook.id}>
-                                                <td>{studentBook.book.title}</td>
-                                                <td>{studentBook.borrow_date}</td>
-                                                <td>{studentBook.due_date}</td>
-                                                <td>{studentBook.status}</td>
-                                                <td>{studentBook.mandatory ? 'Sí' : 'No'}</td>
+                                        {userData.student_books && userData.student_books.map(book => (
+                                            <tr key={book.id}>
+                                                <td>{book.book.title}</td>
+                                                <td>{book.borrow_date}</td>
+                                                <td>{book.due_date}</td>
+                                                <td>{book.status}</td>
+                                                <td>{book.mandatory ? 'Sí' : 'No'}</td>
                                                 <td>
-                                                    <button className="return-book-button" onClick={() => handleReturnBook(studentBook.book.id)}>Devolver</button>
+                                                    <button className="return-book-button" onClick={() => handleReturnBook(book.book.id)}>Devolver</button>
                                                 </td>
                                             </tr>
                                         ))}
