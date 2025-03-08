@@ -6,23 +6,27 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <div className="footer-container">
-      <div className='container_left'>
-        <img src={logo} alt="logo" />
-        <p>©2025 ArteVivo. All rights reserved. Privacy Policy.</p>
+      <div className="logo-container flex-item">
+          <img src={logo} alt="logo artevivo" width="30" />
+          <p className="logo-caption">©2025 ArteVivo.  <span className='logo-span' style={{color: "rgb(244, 174, 112)"}}>All rights reserved.</span>Privacy Policy.</p>
       </div>
-      <div className="footer-links">
-        <ul>
-          <li><a className='link_footer' href="">Nosotros</a></li>
-          <li><a className='link_footer' href="./">Cursos</a></li>
-          <li><Link className="link_footer" to="/registerTeacher">Quiero ser profesor</Link></li>
-          <li><Link className="link_footer" to="/register">Quiero aprender</Link></li>
-        </ul>
-        <ul>
-          <li><Link className="link_footer" to="/dashboard/pageBooks">Libros</Link></li>
-          <li><Link className='link_footer' to="/login">Mi espacio</Link></li>
-          <li><a className='link_footer' href="https://github.com/Nho89/ArteVivo.git">Github</a></li>
-        </ul>
+      <div className='flex-right'>
+        <div className='flex-item'>
+        
+          <Link className="resource-link" to="/">Nosotros</Link>
+          <Link className="resource-link" to="/courses">Cursos</Link>
+          <Link className="resource-link" to="/registerTeacher">Quiero ser Profesor</Link>
+          <Link className="resource-link" to="/register">Quiero aprender</Link>
+        </div>  
+        <div className='flex-item'>
+          <Link className="resource-link" to="/dashboard/pageBooks">Libros</Link>
+          <Link className="resource-link" to="/login">Mi espacio</Link>
+          <Link className="resource-link" href="https://github.com/Nho89/ArteVivo.git">Github</Link>
+        
+        </div>
+
       </div>
+      
     </div>
   )
 }

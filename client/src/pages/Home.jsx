@@ -49,7 +49,7 @@ export default function Home() {
                             style={{ alignItems: "center" }}
                         >
                             <div className="course-img-container">
-                                <img src={course.img} className="img-fluid course-img" alt={course.name} />
+                                <img src={course.url} className="img-fluid course-img" alt={course.name} />
                             </div>
                             <div style={{ width: "50%", padding: "10px" }}>
                                 <h5 className="course-title">{course.name}</h5>

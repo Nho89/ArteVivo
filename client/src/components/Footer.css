@@ -1,4 +1,4 @@
-.footer-container {
+/* .footer-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -46,4 +46,40 @@
 
 .footer-links a:hover {
     text-decoration: underline;
+} */
+
+.footer-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 30px;
+    background-color: #333333;
+    margin: 0;
+    box-sizing: border-box;
+}
+.flex-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+.logo-container {
+    text-align: center;
+    color: rgb(253, 230, 222);
+    font-size: 0.6em;
+}
+
+.flex-item {
+    color: rgb(253, 230, 222);
+    font-size: 1em;
+    justify-content: center;
+    padding: 10px;
+
+}
+
+.resource-link {
+    display: block;
+    color: rgb(253, 230, 222);
+    text-decoration: none;
 }
