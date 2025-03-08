@@ -76,6 +76,10 @@ const ProfilePage = () => {
     const handleReturnBook = async (bookId) => {};
     if (loading) return <p>Cargando datos...</p>
     if (error) return <p>{error}</p>
+    console.log("Datos del usuario:", userData);
+    console.log("Libros del usuario:", userData?.books);
+    console.log("Cursos del usuario:", userData?.courses);
+
   return (
     <div className="profile-page">
             <h2 className="greeting">¡Hola {userData?.first_name}!</h2>
@@ -89,7 +93,7 @@ const ProfilePage = () => {
                                     <thead>
                                         <tr>
                                             <th>Curso</th>
-                                            <th>Fecha</th>
+                                            {/* <th>Fecha</th> */}
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -98,8 +102,8 @@ const ProfilePage = () => {
                                         {userData.courses && userData.courses.length > 0 ? (
                                                 userData.courses.map(course => (
                                             <tr key={course.id}>
-                                                <td>{course.name}</td>
-                                                <td>{course.date}</td>
+                                                <td>{course.course_title}</td>
+                                                {/* <td>{course.date}</td> */}
                                                 <td>{course.status}</td>
                                                 <td>
                                                     <button className="unenroll-button" onClick={() => handleUnenroll(course.id)}>Anular Inscripción</button>
@@ -128,11 +132,12 @@ const ProfilePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {userData.student_books && userData.student_books.map(book => (
+                                        
+                                        {userData.books && userData.books.map(book => (
                                             <tr key={book.id}>
-                                                <td>{book.book.title}</td>
-                                                <td>{book.borrow_date}</td>
-                                                <td>{book.due_date}</td>
+                                                <td>{book.book_title}</td>
+                                                <td>{book.borrowed_at}</td>
+                                                <td>{book.returned_at}</td>
                                                 <td>{book.status}</td>
                                                 <td>{book.mandatory ? 'Sí' : 'No'}</td>
                                                 <td>

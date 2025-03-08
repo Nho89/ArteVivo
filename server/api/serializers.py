@@ -21,6 +21,7 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class EnrollmentSerializer(serializers.ModelSerializer):
+    course_title = serializers.CharField(source='course.name', read_only=True) 
     class Meta:
         model = Enrollment
         fields = '__all__'
@@ -31,6 +32,7 @@ class CourseBookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudentBookSerializer(serializers.ModelSerializer):
+    book_title = serializers.CharField(source='book.title', read_only=True)
     class Meta:
         model = StudentBook
         fields = '__all__'
