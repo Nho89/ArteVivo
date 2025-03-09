@@ -40,13 +40,13 @@ export default function Home() {
 
             <AcademySection />
             <div className="container d-flex flex-column align-items-center main-container">
-                <h3 className="text-center main-title">Available Courses</h3>
+                {/* <h3 className="text-center main-title">Available Courses</h3> */}
                 <div className="row w-100">
                 {courses.map((course, index) => (
                         <div 
                             key={course.id} 
                             className={`col-md-12 mb-4 d-flex ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`} 
-                            style={{ alignItems: "center" }}
+                            style={{ alignItems: "center" , gap:"30px"}}
                         >
                             <div className="course-img-container">
                                 <img src={course.url} className="img-fluid course-img" alt={course.name} />

@@ -84,21 +84,6 @@ const Register = () => {
               {...register('password', { required: true, pattern: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,50}$/ })} required />
             {errors.password?.type === "pattern" && <p>Debe tener 8 caracteres, una mayúscula, un número y un símbolo.</p>}
           </div>
-          {/* <div className="input-group">
-          <label>Selecciona un curso</label>
-          <select id="course" disabled={isLoading} {...register('course')}>
-            <option value="">-- Selecciona un curso --</option>
-            {courses.length === 0 ? (
-              ["Pintura", "Escultura", "Historia del Arte"].map((course, index) => (
-                <option key={index} value={course}>{course}</option>
-              ))
-            ) : (
-              courses.map(course => (
-                <option key={course.id} value={course.name}>{course.name}</option>
-              ))
-            )}
-          </select>
-        </div> */}
           <p className='text_form'>Ya tienes cuenta? <a href="./login">Inicia Sesión</a></p>
           <p className='text_form'><a href=""></a>Olvidé mi contraseña</p>
           <button className="register-button" disabled={isLoading} type="submit">Registrarme</button>

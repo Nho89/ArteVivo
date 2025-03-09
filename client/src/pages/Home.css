@@ -47,11 +47,12 @@
 }
 
 .description-paraf {
-    font-size: 0.7em;
+    font-size: 1em;
     padding: 8px 8px;
+    text-align: justify;
 }
 
 .course-title {
-    font-size: 0.9em;
+    font-size: 1.7em;
     text-align: center;
 }
