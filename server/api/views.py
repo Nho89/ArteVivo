@@ -2,6 +2,8 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
@@ -31,6 +33,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated])
     def loan(self, request, pk=None):
@@ -71,6 +75,7 @@ class BookViewSet(viewsets.ModelViewSet):
 class EnrollmentViewSet(viewsets.ModelViewSet):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
@@ -81,26 +86,20 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
                 for course_book in course_books:
                     book = course_book.book
                     if book.quantity_available > 0:
+                        student = request.user
+                        StudentBook.objects.create(student=student, book=book)
                         book.quantity_available -= 1
                         book.save()
         return response
-
-@api_view(['GET'])
-def get_books_by_student(request, student_id):
-    books = StudentBook.objects.filter(student_id=student_id).select_related('book')
-    books_data = [
-        {
-            "id": loan.book.id,
-            "title": loan.book.title,
-            "author": loan.book.author,
-            "borrow_date": loan.borrow_date,
-            "due_date": loan.due_date,
-            "status": loan.status,
-            "mandatory": loan.mandatory,
-        }
-        for loan in books
-    ]
-    return JsonResponse(books_data, safe=False)
+    
+    def destroy(self, request, *args, **kwargs):
+        try:
+            enrollment = self.get_object()
+            enrollment.delete()
+            return Response({"message": "Enrollment deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except Enrollment.DoesNotExist:
+            return Response({"message": "Enrollment not found."}, status=status.HTTP_404_NOT_FOUND)
+    
 
 class CourseBookViewSet(viewsets.ModelViewSet):
     queryset = CourseBook.objects.all()
@@ -112,11 +111,14 @@ class StudentBookViewSet(viewsets.ModelViewSet):
 
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         
 #Vistas basadas en funciones:
 @api_view(['GET'])
@@ -229,3 +231,10 @@ def delete_book(request, id):
     book = get_object_or_404(Book, pk=id)
     book.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class StudentBookByStudentView(APIView):
+    def get(self, request, user_id):
+        students_books = StudentBook.objects.filter(studentid=user_id)
+        serializer = StudentBookSerializer(students_books, many=True)
+        return Response(serializer.data)

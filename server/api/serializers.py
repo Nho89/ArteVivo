@@ -3,6 +3,8 @@ from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBoo
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password
+
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,37 +46,40 @@ class CourseBookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudentBookSerializer(serializers.ModelSerializer):
-    student_books = BookSerializer(many=True, read_only=True, source="studentbook_set")
-
-
+    is_mandatory = serializers.SerializerMethodField()
     class Meta:
         model = StudentBook
         fields = '__all__'
+    
+    def get_is_mandatory(self, obj):
+        return obj.enrollment is not None
 
         # Generamos JWT tokens
 class LoginSerializer(serializers.Serializer):
-
     username = serializers.CharField()
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         username = data.get("username")
         password = data.get("password")
 
-               
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise serializers.ValidationError("Invalid username or password")
-         
-         # Generamos JWT tokens
+
+        if not check_password(password, user.password):
+            raise serializers.ValidationError("Invalid username or password")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User account is disabled.")
+
         refresh = RefreshToken.for_user(user)
-        print(f"USUARIO: {user}")
 
         return {
-             "access": str(refresh.access_token),
-             "refresh": str(refresh),
-             "user_id": user.id,
-             "role_id": user.role.id if user.role else None,
+            "user_id": user.id,
+            "role_id": user.role.id if user.role else None,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
         }
     

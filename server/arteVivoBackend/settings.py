@@ -95,6 +95,7 @@ WSGI_APPLICATION = 'arteVivoBackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+AUTH_USER_MODEL = 'api.User'  # Cambia 'tu_app' por el nombre de tu app
 
 
 DATABASES = {
@@ -152,11 +153,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #      'rest_framework.permissions.IsAuthenticated',
-    #  )
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 from datetime import timedelta
