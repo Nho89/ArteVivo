@@ -53,6 +53,13 @@ class StudentBookSerializer(serializers.ModelSerializer):
     
     def get_is_mandatory(self, obj):
         return obj.enrollment is not None
+    
+class StudentBookWithBookSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)  # Incluimos los datos del libro
+
+    class Meta:
+        model = StudentBook
+        fields = ['id', 'book', 'borrowed_at', 'returned_at']  # Mantenemos `id` como `student_book_id`
 
         # Generamos JWT tokens
 class LoginSerializer(serializers.Serializer):

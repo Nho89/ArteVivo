@@ -11,8 +11,9 @@ from django.http import JsonResponse
 from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBook
 from .serializers import (
     UserSerializer, RoleSerializer, CourseSerializer, BookSerializer,
-    EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer, LoginSerializer
+    EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer, LoginSerializer, StudentBookWithBookSerializer
 )
+from rest_framework.authentication import SessionAuthentication
 
 
 
@@ -30,13 +31,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication,SessionAuthentication ] #Descomentar si usas Postman
     permission_classes = [IsAuthenticated]
     serializer_class = CourseSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    authentication_classes = [JWTAuthentication,SessionAuthentication ] #Descomentar si usas Postman
     permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated])
@@ -78,7 +80,7 @@ class BookViewSet(viewsets.ModelViewSet):
 class EnrollmentViewSet(viewsets.ModelViewSet):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SessionAuthentication] #Descomentar si usas Postman
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
@@ -108,14 +110,27 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
 class CourseBookViewSet(viewsets.ModelViewSet):
     queryset = CourseBook.objects.all()
     serializer_class = CourseBookSerializer
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
 class StudentBookViewSet(viewsets.ModelViewSet):
     queryset = StudentBook.objects.all()
     serializer_class = StudentBookSerializer
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
+
+class ActiveStudentBooksView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
+
+    def get(self, request, user_id):
+        # Filtrar solo los libros prestados y no devueltos
+        student_books = StudentBook.objects.filter(student_id=user_id, returned_at__isnull=True)
+        
+        # Serializar la información
+        serializer = StudentBookWithBookSerializer(student_books, many=True)
+        
+        return Response(serializer.data)
 
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
