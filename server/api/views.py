@@ -25,15 +25,18 @@ class RoleViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = CourseSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated])
@@ -75,6 +78,7 @@ class BookViewSet(viewsets.ModelViewSet):
 class EnrollmentViewSet(viewsets.ModelViewSet):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
@@ -104,10 +108,14 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
 class CourseBookViewSet(viewsets.ModelViewSet):
     queryset = CourseBook.objects.all()
     serializer_class = CourseBookSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
 class StudentBookViewSet(viewsets.ModelViewSet):
     queryset = StudentBook.objects.all()
     serializer_class = StudentBookSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
@@ -160,12 +168,6 @@ def update_user(request, id):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
-def delete_user(request, id):
-    user = get_object_or_404(User, pk=id)
-    user.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def get_all_courses(request):
@@ -199,12 +201,7 @@ def delete_course(request, id):
     course.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_all_books(request):
-    books = Book.objects.all()
-    serializer = BookSerializer(books, many=True)
-    return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

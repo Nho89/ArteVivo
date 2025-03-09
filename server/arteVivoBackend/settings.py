@@ -68,7 +68,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware', 
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173", 
+    "http://localhost:5173",
+    "http://127.0.0.1:8000"
 ]
 
 ROOT_URLCONF = 'arteVivoBackend.urls'
@@ -164,6 +165,6 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  # Live time of access-token 
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=820),  # Live time of access-token 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),   #  Live time of access-token 
 }
