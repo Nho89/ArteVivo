@@ -25,7 +25,7 @@ export const getBookById = async (id) => {
 
 export const createBook = async (data) => {
     try {
-        // const headers = { 'Authorization': `Bearer ${token}` }
+       
         const response = await axios.post(`${API_URL}`, data);
         return response.data;
     } catch (error) {
@@ -56,7 +56,7 @@ export const updateBookAvailability = async (id, newQuantity) => {
 
 export const deleteBook = async (id) => {
     try {
-        // const headers = { 'Authorization': `Bearer ${token}` }
+        
         const response = await axios.delete(`${API_URL}${id}`, { headers });
         return response.data;
     } catch (error) {

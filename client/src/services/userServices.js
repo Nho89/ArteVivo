@@ -4,7 +4,7 @@ const API_URL = 'http://127.0.0.1:8000/api';
 //http://localhost:3000/users
 export const login = async (userData) =>{
     try {
-        // const headers = { 'Authorization': `Bearer ${token}` }
+
         const response = await axios.post(`${API_URL}/login/`, userData);
         return response.data;
     } catch (error) {
@@ -50,7 +50,7 @@ export const getUsersByRole = async (role) => {
 
 export const deleteUser = async (id) => {
     try {
-        // const headers = { 'Authorization': `Bearer ${token}` }
+        
         const response = await axios.delete(`${API_URL}/users/${id}/`);
     } catch (error) {
         throw error;

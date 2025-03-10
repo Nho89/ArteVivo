@@ -11,6 +11,8 @@
 + [Key Features](#key-features)
 + [Dockerization](#dockerization)
 + [User Authentication](#user-authentication)
++ [Backend Testing](#backend-testing)
++ [API Documentation](#api-documentation)
 + [Project Configuration](#project-configuration)
 + [Project Structure](#project-structure)
 + [Technologies](#technologies)
