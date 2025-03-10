@@ -1,11 +1,15 @@
 # ArteVivo
 
+
 <div align="center">
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <img src="https://res.cloudinary.com/artevivo/image/upload/v1741476404/Rectangle_16_rd2mus.png" width="300" alt="Art Brushes" />
-    <img src="https://res.cloudinary.com/artevivo/image/upload/v1741474860/Brown_Black_Modern_Elegant_Letter_AV_Logo_1_kqzppt.png" width="200" alt="Logo" />
-  </div>
+   <img src="https://res.cloudinary.com/artevivo/image/upload/v1741474860/Brown_Black_Modern_Elegant_Letter_AV_Logo_1_kqzppt.png" width="200" alt="Logo" /> 
 </div>
+
+<div align="center">
+  <img src="https://res.cloudinary.com/artevivo/image/upload/v1741476404/Rectangle_16_rd2mus.png" width="700" alt="Art Brushes" />  
+</div>
+  
+
 
 ## Index
 
