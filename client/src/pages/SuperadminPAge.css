@@ -82,7 +82,7 @@
     background-color: #ddd;
 }
 
-button {
+.button-panel {
     padding: 5px 10px;
     border: none;
     cursor: pointer;

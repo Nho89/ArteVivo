@@ -86,8 +86,10 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        if response.status_code == 201:
+        """Cuando un estudiante se inscribe, disminuye la cantidad disponible de los libros del curso."""
+        response = super().create(request, *args, **kwargs)  # Llamamos al método original para crear la inscripción
+        
+        if response.status_code == 201:  # Si se creó correctamente
             course_id = request.data.get("course")
             if course_id:
                 course_books = CourseBook.objects.filter(course_id=course_id)
@@ -118,34 +120,9 @@ class CourseBookViewSet(viewsets.ModelViewSet):
 class StudentBookViewSet(viewsets.ModelViewSet):
     queryset = StudentBook.objects.all()
     serializer_class = StudentBookSerializer
-    authentication_classes = [JWTAuthentication, SessionAuthentication]
-    permission_classes = [IsAuthenticated]
 
-class ActiveStudentBooksView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication, SessionAuthentication]
 
-    def get(self, request, user_id):
-        # Filtrar solo los libros prestados y no devueltos
-        student_books = StudentBook.objects.filter(student_id=user_id, returned_at__isnull=True)
-        
-        # Serializar la información
-        serializer = StudentBookWithBookSerializer(student_books, many=True)
-        
-        return Response(serializer.data)
 
-class LoginAPIView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        
-#Vistas basadas en funciones:
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_users(request):
@@ -218,7 +195,12 @@ def delete_course(request, id):
     course.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def get_all_books(request):
+    books = Book.objects.all()
+    serializer = BookSerializer(books, many=True)
+    return Response(serializer.data)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -230,7 +212,7 @@ def create_book(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_book(request, id):
     book = get_object_or_404(Book, pk=id)
     serializer = BookSerializer(book, data=request.data, partial=True)

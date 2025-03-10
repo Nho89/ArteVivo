@@ -10,10 +10,16 @@ services:
       - "8000:8000"
     depends_on:
       - mysql-db
-    env_file:
-      - .env
+    environment:
+      - DB_NAME=artevivo
+      - DB_USER=root
+      - DB_PASSWORD=artevivo
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
     networks:
       - app-network 
+    command: >  
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"  
   
   frontend:
     build:
@@ -21,7 +27,7 @@ services:
       dockerfile: client/Dockerfile
     container_name: react-frontend
     ports:
-      - "3000:3000"
+      - "5171:5173"
     networks:
       - app-network
 

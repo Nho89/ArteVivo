@@ -3,9 +3,11 @@ import { getUsersByRole, deleteUser, updateUser } from '../services/userServices
 import { getCourses } from '../services/courseServices';
 import { getAllBooks } from '../services/booksServices';
 import { useUserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 import './SuperadminPage.css';
 const SuperadminPage = () => {
-    const { user } = useUserContext(); 
+    const { user, setUser, userAuth, setUserAuth, userRole, setUserRole } = useUserContext();
+    const navigate = useNavigate(); 
     const [selectedRole, setSelectedRole] = useState(null);
     const [userData, setUserData] = useState([]);
     const [coursesData, setCoursesData] = useState([]);
@@ -76,6 +78,15 @@ const SuperadminPage = () => {
             console.error('Error actualizando usuario', err);
         }
     };
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('user_id');
+        setUserAuth(false);
+        setUser(null);
+        setUserRole(null);
+        navigate('/');
+    };
     return (
         <div className='panel_admin'>
             <div className='list_panel'><ul>
@@ -92,12 +103,13 @@ const SuperadminPage = () => {
                 <p>Administradores</p>
                 {loading && <p>Cargando...</p>}
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-
+                <button onClick={handleLogout}>Cerrar Sesión</button>
                 {selectedRole && [1, 2, 3].includes(selectedRole) && (
                     <table border="1" className='data_table'>
                         <thead>
                             <tr>
                                 <th>Rol</th>
+                                <th>Nombre</th>
                                 <th>Email</th>
                                 <th>Acciones</th>
                             </tr>
@@ -108,6 +120,7 @@ const SuperadminPage = () => {
                                     <td>{user.role === 1 ? 'Estudiante' : 
                                         user.role === 2 ? 'Profesor' : 
                                         user.role === 3 ? 'Administrador' : 'Rol desconocido'}</td>
+                                    <td>{user.username}</td>
                                     <td>{user.email}</td>
                                     <td>
                                         {editingUserId === user.id ? (
@@ -133,8 +146,8 @@ const SuperadminPage = () => {
                                                     <option value="2">Profesor</option>
                                                     <option value="3">Administrador</option>
                                                 </select>
-                                                <button type="submit">Guardar</button>
-                                                <button type="button" onClick={() => setEditingUserId(null)}>Cancelar</button>
+                                                <button type="submit" className='button-panel'>Guardar</button>
+                                                <button type="button" className='button-panel' onClick={() => setEditingUserId(null)}>Cancelar</button>
                                             </form>
                                         ) : (
                                             <>
