@@ -10,8 +10,8 @@ services:
       - "8000:8000"
     depends_on:
       - mysql-db
-    .env_file:
-      - fileName.env
+    env_file:
+      - .env
     networks:
       - app-network 
   
@@ -28,8 +28,8 @@ services:
   mysql-db:
     image: mysql:8.0
     container_name: mysql-db
-    .env_file:
-      - fileName.env
+    env_file:
+      - .env
     volumes:
       - mysql-data:/var/lib/mysql
     ports:

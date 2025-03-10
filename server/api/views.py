@@ -41,12 +41,14 @@ class BookViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication,SessionAuthentication ] #Descomentar si usas Postman
     permission_classes = [IsAuthenticated]
 
-    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated], authentication_classes=[JWTAuthentication,SessionAuthentication ]) #Descomentar si us
     def loan(self, request, pk=None):
         try:
             book = self.get_object()  # Obtenemos el libro
             user = request.user  # Obtenemos el usuario autenticado
-
+            # Verificar si el usuario está autenticado
+            if not user:
+                return JsonResponse({"message": "Usuario no autenticado."}, status=401)
             # Verificamos si el usuario tiene el rol de "Alumno"
             if user.role.id != 1:  # 1 es el rol de estudiante
                 return JsonResponse({"message": "El usuario no tiene permisos para realizar este préstamo."}, status=403)
