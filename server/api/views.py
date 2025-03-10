@@ -1,15 +1,21 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBook
-from .serializers import UserSerializer, RoleSerializer, CourseSerializer, BookSerializer, EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer, LoginSerializer
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.shortcuts import render, get_object_or_404, redirect
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
+from django.http import JsonResponse
+from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBook
+from .serializers import (
+    UserSerializer, RoleSerializer, CourseSerializer, BookSerializer,
+    EnrollmentSerializer, CourseBookSerializer, StudentBookSerializer, LoginSerializer, StudentBookWithBookSerializer
+)
+from rest_framework.authentication import SessionAuthentication
+
+
 
 
 #Vistas basadas en clases
@@ -20,91 +26,126 @@ class RoleViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
+    authentication_classes = [JWTAuthentication,SessionAuthentication ] #Descomentar si usas Postman
+    permission_classes = [IsAuthenticated]
     serializer_class = CourseSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    authentication_classes = [JWTAuthentication,SessionAuthentication ] #Descomentar si usas Postman
+    permission_classes = [IsAuthenticated]
 
-    @action(detail=True, methods=['patch'])
-    def update_availability(self, request, pk=None):
+    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated], authentication_classes=[JWTAuthentication,SessionAuthentication ]) #Descomentar si us
+    def loan(self, request, pk=None):
         try:
-            book = self.get_object()
-            print(f"Libro con ID: (id: {book.id}) encontrado")
-            new_availability = request.data.get("quantity_available")  
-            try:
-                new_availability = int(new_availability)
-            except (ValueError, TypeError):
-                return Response(
-                    {"message": "La disponibilidad debe ser un número entero"},
-                    status=status.HTTP_400_BAD_REQUEST
-            )
-            if new_availability is not None and isinstance(new_availability, int):
-                if new_availability >= 0:
-                    book.quantity_available = new_availability
-                    book.save()
-                    return Response(
-                        {"message": "Disponibilidad actualizada correctamente", "quantity_available": book.quantity_available},
-                        status=status.HTTP_200_OK
-                    )
-                return Response(
-                        {"message": "La disponibilidad no puede ser negativa"},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-            return Response(
-                        {"message": "La disponibilidad debe ser un número entero"},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
+            book = self.get_object()  # Obtenemos el libro
+            user = request.user  # Obtenemos el usuario autenticado
+            # Verificar si el usuario está autenticado
+            if not user:
+                return JsonResponse({"message": "Usuario no autenticado."}, status=401)
+            # Verificamos si el usuario tiene el rol de "Alumno"
+            if user.role.id != 1:  # 1 es el rol de estudiante
+                return JsonResponse({"message": "El usuario no tiene permisos para realizar este préstamo."}, status=403)
+
+            if book.quantity_available > 0:  # Verificamos que haya disponibilidad
+                # Actualizamos la disponibilidad del libro
+                book.quantity_available -= 1
+                book.save()
+
+                # Registramos el préstamo del libro en StudentBook
+                student_book = StudentBook.objects.create(
+                    student=user,  # Usamos el usuario autenticado como estudiante
+                    book=book,
+                )
+
+                return JsonResponse({
+                    "message": "Préstamo realizado con éxito",
+                    "book_title": book.title,
+                    "student": user.username,
+                    "borrowed_at": student_book.borrowed_at
+                }, status=200)
+            else:
+                return JsonResponse({"message": "No hay copias disponibles"}, status=400)
+
+        except Book.DoesNotExist:
+            return JsonResponse({"message": "Libro no encontrado"}, status=404)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": str(e)}, status=500)
+
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+    authentication_classes = [JWTAuthentication, SessionAuthentication] #Descomentar si usas Postman
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        """Cuando un estudiante se inscribe, disminuye la cantidad disponible de los libros del curso."""
-        response = super().create(request, *args, **kwargs)  # Llamamos al método original para crear la inscripción
-        
-        if response.status_code == 201:  # Si se creó correctamente
+        response = super().create(request, *args, **kwargs)
+        if response.status_code == 201:
             course_id = request.data.get("course")
-            student_id = request.data.get("student")
-            
-            if course_id and student_id:
+            if course_id:
                 course_books = CourseBook.objects.filter(course_id=course_id)
                 for course_book in course_books:
                     book = course_book.book
                     if book.quantity_available > 0:
+                        student = request.user
+                        StudentBook.objects.create(student=student, book=book)
                         book.quantity_available -= 1
                         book.save()
-            
         return response
+    
+    def destroy(self, request, *args, **kwargs):
+        try:
+            enrollment = self.get_object()
+            enrollment.delete()
+            return Response({"message": "Enrollment deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except Enrollment.DoesNotExist:
+            return Response({"message": "Enrollment not found."}, status=status.HTTP_404_NOT_FOUND)
+    
 
 class CourseBookViewSet(viewsets.ModelViewSet):
     queryset = CourseBook.objects.all()
     serializer_class = CourseBookSerializer
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
 class StudentBookViewSet(viewsets.ModelViewSet):
     queryset = StudentBook.objects.all()
     serializer_class = StudentBookSerializer
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
-# class LoginAPIView(APIView):
-#     def post(self, request):
-       
-#         serializer = LoginSerializer(data=request.data) 
-#         if serializer.is_valid():
-#             return Response(serializer.validated_data, status=status.HTTP_200_OK)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class ActiveStudentBooksView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
+
+    def get(self, request, user_id):
+        # Filtrar solo los libros prestados y no devueltos
+        student_books = StudentBook.objects.filter(student_id=user_id, returned_at__isnull=True)
         
+        # Serializar la información
+        serializer = StudentBookWithBookSerializer(student_books, many=True)
+        
+        return Response(serializer.data)
 
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
 
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
 #Vistas basadas en funciones:
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_users(request):
@@ -144,12 +185,6 @@ def update_user(request, id):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
-def delete_user(request, id):
-    user = get_object_or_404(User, pk=id)
-    user.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def get_all_courses(request):
@@ -183,12 +218,7 @@ def delete_course(request, id):
     course.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def get_all_books(request):
-    books = Book.objects.all()
-    serializer = BookSerializer(books, many=True)
-    return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -200,7 +230,7 @@ def create_book(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update_book(request, id):
     book = get_object_or_404(Book, pk=id)
     serializer = BookSerializer(book, data=request.data, partial=True)
@@ -216,9 +246,9 @@ def delete_book(request, id):
     book.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-class LoginAPIView(APIView):
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StudentBookByStudentView(APIView):
+    def get(self, request, user_id):
+        students_books = StudentBook.objects.filter(studentid=user_id)
+        serializer = StudentBookSerializer(students_books, many=True)
+        return Response(serializer.data)

@@ -68,7 +68,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware', 
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173", 
+    "http://localhost:5173",
+    "http://127.0.0.1:8000"
 ]
 
 ROOT_URLCONF = 'arteVivoBackend.urls'
@@ -95,6 +96,7 @@ WSGI_APPLICATION = 'arteVivoBackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+AUTH_USER_MODEL = 'api.User'  # Cambia 'tu_app' por el nombre de tu app
 
 
 DATABASES = {
@@ -152,11 +154,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #      'rest_framework.permissions.IsAuthenticated',
-    #  )
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -165,6 +168,6 @@ AUTHENTICATION_BACKENDS = [
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  # Live time of access-token 
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=820),  # Live time of access-token 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),   #  Live time of access-token 
 }

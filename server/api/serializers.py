@@ -3,6 +3,8 @@ from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBoo
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password
+
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,13 +35,23 @@ class CourseBookSerializer(serializers.ModelSerializer):
 
 class StudentBookSerializer(serializers.ModelSerializer):
     book_title = serializers.CharField(source='book.title', read_only=True)
+    is_mandatory = serializers.SerializerMethodField()
     class Meta:
         model = StudentBook
         fields = '__all__'
+    
+    def get_is_mandatory(self, obj):
+        return obj.enrollment is not None
+    
+class StudentBookWithBookSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)  # Incluimos los datos del libro
+
+    class Meta:
+        model = StudentBook
+        fields = ['id', 'book', 'borrowed_at', 'returned_at']  # Mantenemos `id` como `student_book_id`
 
         # Generamos JWT tokens
 class LoginSerializer(serializers.Serializer):
-
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
@@ -47,22 +59,24 @@ class LoginSerializer(serializers.Serializer):
         username = data.get("username")
         password = data.get("password")
 
-               
-        user = authenticate(username=username, password=password)
-        print(f"USUARIO: {user}")
-        if user is None:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
             raise serializers.ValidationError("Invalid username or password")
-        user = User.objects.select_related('role').get(username=username) 
-        role_id = user.role.id if user.role else None
-         # Generamos JWT tokens
+
+        if not check_password(password, user.password):
+            raise serializers.ValidationError("Invalid username or password")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User account is disabled.")
+
         refresh = RefreshToken.for_user(user)
-        print(f"USUARIO: {user}")
 
         return {
-             "access": str(refresh.access_token),
-             "refresh": str(refresh),
-             "user_id": user.id,
-             "role_id": role_id,
+            "user_id": user.id,
+            "role_id": user.role.id if user.role else None,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
         }
     
 class UserSerializer(serializers.ModelSerializer):

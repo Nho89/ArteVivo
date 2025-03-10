@@ -10,12 +10,8 @@ services:
       - "8000:8000"
     depends_on:
       - mysql-db
-    environment:
-      - DB_NAME=artevivo
-      - DB_USER=root
-      - DB_PASSWORD=artevivo
-      - DB_HOST=mysql-db
-      - DB_PORT=3306
+    env_file:
+      - .env
     networks:
       - app-network 
   
@@ -32,11 +28,8 @@ services:
   mysql-db:
     image: mysql:8.0
     container_name: mysql-db
-    environment:
-      - MYSQL_ROOT_PASSWORD=artevivo
-      - MYSQL_DATABASE=artevivo
-      - MYSQL_ROOT_HOST=%
-      - MYSQL_DISABLE_SSL=true
+    env_file:
+      - .env
     volumes:
       - mysql-data:/var/lib/mysql
     ports:

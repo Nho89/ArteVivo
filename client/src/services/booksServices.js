@@ -23,6 +23,15 @@ export const getBookById = async (id) => {
     }
 }
 
+export const getBookByStudentId = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL}/books/student/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const createBook = async (data) => {
     try {
        
@@ -44,7 +53,7 @@ export const updateBook = async (id, data) => {
 
 export const updateBookAvailability = async (id, newQuantity) => {
     try {
-        const response = await axios.patch(`${API_URL}/books/${id}/update_availability/`, {
+        const response = await axios.patch(`${API_URL}/books/${id}/`, {
             quantity_available: newQuantity
         });
         return response.data;
