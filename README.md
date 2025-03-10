@@ -1,18 +1,79 @@
 # ArteVivo
-<img src="https://img.freepik.com/foto-gratis/collage-cinco-sentidos_23-2150009307.jpg?t=st=1740954784~exp=1740958384~hmac=d84fb79d36a8f4179222fc60b2652d010ebf306ae329090a5c0c8cdb9f10b322&w=1380" width="300" alt="Pinceles de arte" />
+
+<div align="center">
+  <img src="https://res.cloudinary.com/artevivo/image/upload/v1741474860/Brown_Black_Modern_Elegant_Letter_AV_Logo_1_kqzppt.png" width="200" alt="Logo" />
+</div>
+
+<div align="center">
+  <img src="https://res.cloudinary.com/artevivo/image/upload/v1741476404/Rectangle_16_rd2mus.png" width="700" alt="Art Brushes" />
+</div>
+
+## Description
+
+Art school where you can learn through our courses.
 
 ## Index
 
 + [Description](#description)
++ [Key Features](#key-features)
++ [Dockerization](#dockerization)
++ [User Authentication](#user-authentication)
++ [Backend Testing](#backend-testing)
++ [API Documentation](#api-documentation)
 + [Project Configuration](#project-configuration)
 + [Project Structure](#project-structure)
 + [Technologies](#technologies)
 + [Authors](#authors)
 + [Contributions](#contributions)
 
-## Description
+## Key Features
 
-<p>ArteVivo es una aplicación web diseñada para facilitar la gestión de una escuela de arte. Permite a los estudiantes registrarse en clases y a los profesores inscribirse para impartirlas. El proyecto está dividido en dos partes: un frontend construido con Node.js, Vite y React, y un backend construido con Django REST Framework y Python. Ambos se encuentran en el mismo repositorio, separados en las carpetas <code>client</code> y <code>server</code>.</p>
+*   **User Registration and Login:** Secure authentication for students and teachers.
+*   **Course Catalog:** Listing of available courses with details such as description, teacher, and schedules.
+*   **Course Enrollment:** Students can enroll in the courses of their choice.
+*   **Profile Management:** Users can manage their profiles, including enrolled courses.
+*   **Admin Panel:** (If applicable) A panel for administrators to manage courses, users, and other aspects of the school.
+
+## Dockerization
+
+The project is dockerized to facilitate its deployment and management in different environments. `Dockerfile` and `docker-compose.yml` files are provided to build and run the application using Docker.
+
+To build and run the application with Docker:
+
+1.  Make sure you have Docker and Docker Compose installed on your system.
+2.  Navigate to the root directory of the project.
+3.  Run the following command:
+
+    ```bash
+    docker-compose up --build
+    ```
+
+## User Authentication
+
+The application implements a user authentication system to protect access to certain features and data. Users can register, log in, and manage their profiles securely.
+
+## Backend Testing
+
+The backend includes a suite of tests to ensure the reliability and stability of the API. These tests cover various aspects of the application, including models, views, and serializers.
+
+To run the backend tests:
+
+1.  Navigate to the [server](http://_vscodecontentref_/0) directory.
+2.  Activate the virtual environment (if you have one).
+3.  Run the following command:
+
+    ```bash
+    python manage.py test
+    ```
+<div align="center">
+  <img src="https://res.cloudinary.com/artevivo/image/upload/v1741598407/Captura_de_pantalla_2025-03-10_101911_qna3qx.png" width="700" alt="Art Brushes" />
+</div>
+
+## API Documentation
+
+The API documentation is available in Postman format. You can import the provided Postman collection to explore and test the API endpoints.
+
+*   Postman Collection (`https://documenter.getpostman.com/view/37812230/2sAYdoGTCT)
 
 ## Project Configuration
 
@@ -20,10 +81,9 @@
 
     ```bash
     git clone https://github.com/Nho89/ArteVivo.git
-    
     ```
 
-### Backend (Django REST Framework - `server` folder)
+### Backend (Django REST Framework - [server](http://_vscodecontentref_/1) folder)
 
 1.  **Navigate to the Backend Directory:**
 
@@ -58,7 +118,7 @@
     python manage.py runserver
     ```
 
-### Frontend (Node.js, Vite, React - `client` folder)
+### Frontend (Node.js, Vite, React - [client](http://_vscodecontentref_/2) folder)
 
 1.  **Navigate to the Frontend Directory:**
 
@@ -80,18 +140,26 @@
 
 ## Project Structure
 
-* `client/`: Frontend application (React, Vite, Node.js).
-    * `src/`: Source code.
-    * `public/`: Public assets.
-    * `package.json`: Node.js dependencies and scripts.
-    * `vite.config.js`: Vite configuration.
-* `server/`: Backend application (Django REST Framework, Python).
-    * `api/`: Django rest framework application.
-    * `manage.py`: Django management script.
-    * `requirements.txt`: Python dependencies.
-    * `.venv/`: Virtual environment (optional).
-* `.gitignore`: Files ignored by Git.
-* `README.md`: Project documentation.
+*   [client](http://_vscodecontentref_/3): Frontend application (React, Vite, Node.js).
+    *   `src/`: Source code.
+        *   `components/`: Reusable React components.
+        *   `pages/`: React components representing different pages.
+        *   `layout/`: Layout components for structuring the UI.
+        *   `router/`: Configuration for routing in the application.
+        *   `services/`: Modules for handling API calls and data fetching.
+    *   `public/`: Public assets.
+    *   `package.json`: Node.js dependencies and scripts.
+    *   `vite.config.js`: Vite configuration.
+*   [server](http://_vscodecontentref_/4): Backend application (Django REST Framework, Python).
+    *   `ArteVivoBackend/`: Django project.
+    *   `api/`: Django REST Framework application.
+    *   `manage.py`: Django management script.
+    *   `requirements.txt`: Python dependencies.
+    *   `tests/`: Backend tests.
+    *   `Dockerfile`: Configuration files for Docker.
+    *   [docker-compose.yml](http://_vscodecontentref_/5): Configuration file for Docker Compose.
+*   `.gitignore`: Files ignored by Git.
+*   [README.md](http://_vscodecontentref_/6): Project documentation.
 
 ## Technologies
 
@@ -107,17 +175,16 @@
 <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/figma.png" >&nbsp;
 <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/html.png" >&nbsp;
 <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/css.png" >&nbsp;
+<img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/docker.png" >&nbsp;
 
 ## Authors
 
-* [Michael López](https://github.com/mikewig)
-* [Veida Velázquez](https://github.com/DarthVada36)
-* [Maryna Nalyvaiko](https://github.com/MarynaDRST)
-* [Nhoeli Salazar](https://github.com/Nho89)
-* [Mani shidfar](https://github.com/Mani8217)
+*   [Michael López](https://github.com/mikewig)
+*   [Veida Velázquez](https://github.com/DarthVada36)
+*   [Maryna Nalyvaiko](https://github.com/MarynaDRST)
+*   [Nhoeli Salazar](https://github.com/Nho89)
+*   [Mani shidfar](https://github.com/Mani8217)
 
 ## Contributions
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please create an issue or submit a pull request.
-
-**[⬆️ Back to Index](#index)**
