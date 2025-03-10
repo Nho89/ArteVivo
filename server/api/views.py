@@ -67,9 +67,9 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """Cuando un estudiante se inscribe, disminuye la cantidad disponible de los libros del curso."""
-        response = super().create(request, *args, **kwargs)  # Llamamos al método original para crear la inscripción
+        response = super().create(request, *args, **kwargs)  
         
-        if response.status_code == 201:  # Si se creó correctamente
+        if response.status_code == 201: 
             course_id = request.data.get("course")
             student_id = request.data.get("student")
             
@@ -90,19 +90,6 @@ class CourseBookViewSet(viewsets.ModelViewSet):
 class StudentBookViewSet(viewsets.ModelViewSet):
     queryset = StudentBook.objects.all()
     serializer_class = StudentBookSerializer
-
-# class LoginAPIView(APIView):
-#     def post(self, request):
-       
-#         serializer = LoginSerializer(data=request.data) 
-#         if serializer.is_valid():
-#             return Response(serializer.validated_data, status=status.HTTP_200_OK)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-
-
-#Vistas basadas en funciones:
 
 
 @api_view(['GET'])
@@ -184,7 +171,6 @@ def delete_course(request, id):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
 def get_all_books(request):
     books = Book.objects.all()
     serializer = BookSerializer(books, many=True)
@@ -200,7 +186,6 @@ def create_book(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
 def update_book(request, id):
     book = get_object_or_404(Book, pk=id)
     serializer = BookSerializer(book, data=request.data, partial=True)
