@@ -10,7 +10,7 @@
 
 ## Description
 
-Art school where you can learn through our courses.
+ArteVivo is a web application designed to facilitate the management of an art school. It allows students to register for classes and teachers to sign up to teach them. The project is divided into two parts: a frontend built with Node.js, Vite, and React, and a backend built with Django REST Framework and Python. Both are located in the same repository, separated into the `client` and `server` folders.
 
 ## Index
 
