@@ -59,7 +59,7 @@ The backend includes a suite of tests to ensure the reliability and stability of
 To run the backend tests:
 
 1.  Navigate to the [server](http://_vscodecontentref_/0) directory.
-2.  Activate the virtual environment (if you have one).
+2.  Activate the virtual environment.
 3.  Run the following command:
 
     ```bash
@@ -94,9 +94,8 @@ The API documentation is available in Postman format. You can import the provide
 2.  **(Optional) Create a virtual environment:**
 
     ```bash
-    python -m venv venv
-    source venv/bin/activate  # For macOS/Linux
-    venv\Scripts\activate      # For Windows
+    python -m venv .venv
+    source .venv\Scripts\activate      
     ```
 
 3.  **Install Dependencies:**
