@@ -21,7 +21,7 @@ const Footer = () => {
         <div className='flex-item'>
           <Link className="resource-link" to="/dashboard/pageBooks">Libros</Link>
           <Link className="resource-link" to="/login">Mi espacio</Link>
-          <Link className="resource-link" href="https://github.com/Nho89/ArteVivo.git">Github</Link>
+          <Link className="resource-link" to="https://github.com/Nho89/ArteVivo.git">Github</Link>
         
         </div>
 

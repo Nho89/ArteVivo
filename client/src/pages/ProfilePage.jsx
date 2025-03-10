@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext'
 import { getUserById } from '../services/userServices';
 import { getCourses, enrollInCourse } from '../services/courseServices';
@@ -7,23 +7,24 @@ import { getAllBooks } from '../services/booksServices';
 import './ProfilePage.css';
 const ProfilePage = () => {
     const { id } = useParams();
-    const { user, setUser, userRole, setUserRole } = useUserContext(); 
+    const navigate = useNavigate();
+    const { user, setUser, userAuth, setUserAuth, userRole, setUserRole } = useUserContext(); 
     const [userData, setUserData] = useState(null);
     const [coursesData, setCoursesData] = useState([]);
     const [booksData, setBooksData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [showEnrollDropdown, setShowEnrollDropdown] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const data = await getUserById(id);
-                console.log('Datos del usuario:', data);
                 setUserData(data);
                 setUser(data);
                 setUserRole(data.role);
                 setLoading(false);
-                setCoursesData(data.courses || []);
                 setBooksData(data.books || []);
             } catch (error) {
                 setError("Error al obtener los datos del usuario");
@@ -35,12 +36,20 @@ const ProfilePage = () => {
         }
     }, [id, setUser, setUserRole]);
     
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('user_id');
+        setUserAuth(false);
+        setUser(null);
+        setUserRole(null);
+        navigate('/');
+    };
 
     useEffect(() => {
       const fetchCoursesData = async () => {
         try {
           const data = await getCourses();
-          console.log('Cursos obtenidos:', data);
           setCoursesData(data);
         } catch (error) {
           setError("Error al obtener los cursos");
@@ -51,22 +60,19 @@ const ProfilePage = () => {
       const fetchBooksData = async () => {
         try {
           const data = await getAllBooks();
-          console.log('Libros:', data);
           setBooksData(data);
         } catch (error) {
           setError("Error al obtener los libros");
         }
       };fetchBooksData();
     }, []);
-    const handleEnroll = async (courseId) => {
-        
-        console.log('Libros:', userData.books);
-
+    const handleEnroll = async () => {
+        if (!selectedCourse) return;
         try {
-            await enrollInCourse(user.id, courseId);
+            await enrollInCourse(user.id, selectedCourse);
             const updatedUserData = await getUserById(user.id);
             setUserData(updatedUserData);
-            setCoursesData(updatedUserData.courses);
+            setShowEnrollDropdown(false);
         } catch (error) {
             setError("Error al inscribirse en el curso");
         }
@@ -74,11 +80,10 @@ const ProfilePage = () => {
     const handleUnenroll = async (courseId) =>{};
 
     const handleReturnBook = async (bookId) => {};
+
     if (loading) return <p>Cargando datos...</p>
     if (error) return <p>{error}</p>
-    console.log("Datos del usuario:", userData);
-    console.log("Libros del usuario:", userData?.books);
-    console.log("Cursos del usuario:", userData?.courses);
+    
 
   return (
     <div className="profile-page">
@@ -93,7 +98,6 @@ const ProfilePage = () => {
                                     <thead>
                                         <tr>
                                             <th>Curso</th>
-                                            {/* <th>Fecha</th> */}
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -103,11 +107,10 @@ const ProfilePage = () => {
                                                 userData.courses.map(course => (
                                             <tr key={course.id}>
                                                 <td>{course.course_title}</td>
-                                                {/* <td>{course.date}</td> */}
                                                 <td>{course.status}</td>
-                                                <td>
-                                                    <button className="unenroll-button" onClick={() => handleUnenroll(course.id)}>Anular Inscripción</button>
-                                                    <button className="submit-task-button">Enviar Tarea</button>
+                                                <td className='actions-table'>
+                                                    <button className="action-button-unenroll-button" onClick={() => handleUnenroll(course.id)}>Anular Inscripción</button>
+                                                    <button className="action-button submit-task-button">Enviar Tarea</button>
                                                 </td>
                                             </tr>
                                         ))) : (
@@ -115,7 +118,18 @@ const ProfilePage = () => {
                                         )}
                                     </tbody>
                                 </table>
-                                <button className="enroll-button" onClick={() => handleEnroll(course.id)}>Inscribirme a un Curso</button>
+                                <button className="action-button enroll-button" onClick={() => setShowEnrollDropdown(!showEnrollDropdown)}>Inscribirme a un Curso</button>
+                                {showEnrollDropdown && (
+                                    <div className="enroll-dropdown">
+                                        <select onChange={(e) => setSelectedCourse(e.target.value)} value={selectedCourse}>
+                                            <option value="">Selecciona un curso</option>
+                                            {coursesData.map(course => (
+                                                <option key={course.id} value={course.id}>{course.course_title}</option>
+                                            ))}
+                                        </select>
+                                        <button className="action-button enroll-button" onClick={handleEnroll}>Inscribirse</button>
+                                    </div>
+                                )}
                             </div>
 
                             <div className='student-profile'>
@@ -141,13 +155,13 @@ const ProfilePage = () => {
                                                 <td>{book.status}</td>
                                                 <td>{book.mandatory ? 'Sí' : 'No'}</td>
                                                 <td>
-                                                    <button className="return-book-button" onClick={() => handleReturnBook(book.book.id)}>Devolver</button>
+                                                    <button className="action-button return-book-button" onClick={() => handleReturnBook(book.book.id)}>Devolver</button>
                                                 </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                                <button className="request-book-button">Pedir un libro</button>
+                                <button className="action-button request-book-button">Pedir un libro</button>
                             </div>
                         </>
                     )}
@@ -159,7 +173,34 @@ const ProfilePage = () => {
                                     <li key={course.id}>{course.name}</li>
                                 ))}
                             </ul>
+                            <table className="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Curso</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {userData.courses && userData.courses.length > 0 ? (
+                                                userData.courses.map(course => (
+                                            <tr key={course.id}>
+                                                <td>{course.course_title}</td>
+                                                <td>{course.status}</td>
+                                                <td>
+                                                    <button className="action-button submit-task-button">Darse de baja</button>
+                                                </td>
+                                            </tr>
+                                        ))) : (
+                                            <tr><td colSpan="4">No tienes cursos inscritos.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                                <button className="action-button request-book-button">Dar otro curso</button>
                         </>
+                    )}
+                    {userAuth && (
+                        <button className="action-button logout-button" onClick={handleLogout}>Cerrar Sesión</button>
                     )}
                 </div>
             ) : (

@@ -48,11 +48,12 @@ class LoginSerializer(serializers.Serializer):
         password = data.get("password")
 
                
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
+        user = authenticate(username=username, password=password)
+        print(f"USUARIO: {user}")
+        if user is None:
             raise serializers.ValidationError("Invalid username or password")
-         
+        user = User.objects.select_related('role').get(username=username) 
+        role_id = user.role.id if user.role else None
          # Generamos JWT tokens
         refresh = RefreshToken.for_user(user)
         print(f"USUARIO: {user}")
@@ -61,7 +62,7 @@ class LoginSerializer(serializers.Serializer):
              "access": str(refresh.access_token),
              "refresh": str(refresh),
              "user_id": user.id,
-             "role_id": user.role.id if user.role else None,
+             "role_id": role_id,
         }
     
 class UserSerializer(serializers.ModelSerializer):

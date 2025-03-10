@@ -104,7 +104,7 @@ DATABASES = {
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -159,6 +159,9 @@ REST_FRAMEWORK = {
     #  )
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 from datetime import timedelta
 
 SIMPLE_JWT = {

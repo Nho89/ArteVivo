@@ -28,7 +28,7 @@ class Book(models.Model):
 
 # Inscripciones de Estudiantes a Cursos
 class Enrollment(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'Alumno'})
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'student'})
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=[('Inscrito', 'Inscrito'), ('Aprobado', 'Aprobado'), ('No aprobado', 'No aprobado')], default='Inscrito')
 

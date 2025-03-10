@@ -8,7 +8,12 @@
 .course-info {
     flex: 2;
     text-align: justify;
+    width: 50%;
     
+}
+.image-course-details{
+    width: 70%;
+    height: auto;
 }
 
 .course-actions {
@@ -21,7 +26,7 @@
 }
 
 .course-image {
-    max-width: 100%;
+    max-width: 50%;
     height: auto;
 }
 
