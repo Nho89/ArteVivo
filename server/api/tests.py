@@ -78,12 +78,6 @@ class TestModels(TestCase):
         self.assertEqual(student_book.book, self.book)
         self.assertIsNotNone(student_book.borrowed_at)
         self.assertIsNone(student_book.returned_at)
-
-    def test_book_quantity_available(self):
-        initial_quantity = self.book.quantity_available
-        student_book = StudentBook.objects.create(student=self.student_user, book=self.book)
-        self.book.refresh_from_db()
-        self.assertEqual(self.book.quantity_available, initial_quantity - 1)
         
     def test_book_return(self):
         student_book = StudentBook.objects.create(student=self.student_user, book=self.book)

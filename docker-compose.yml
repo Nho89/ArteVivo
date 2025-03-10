@@ -9,25 +9,32 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     environment:
       - DB_NAME=artevivo
       - DB_USER=root
-      - DB_PASSWORD=artevivo
+      - DB_PASSWORD=misaelamparo10
       - DB_HOST=mysql-db
       - DB_PORT=3306
     networks:
-      - app-network 
-  
+      - app-network
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"  
+
   frontend:
     build:
       context: .
       dockerfile: client/Dockerfile
     container_name: react-frontend
+    depends_on:
+      mysql-db:
+        condition: service_healthy
     ports:
-      - "3000:3000"
+      - "5171:5173"
     networks:
       - app-network
+
 
   mysql-db:
     image: mysql:8.0
@@ -37,6 +44,12 @@ services:
       - MYSQL_DATABASE=artevivo
       - MYSQL_ROOT_HOST=%
       - MYSQL_DISABLE_SSL=true
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s 
     volumes:
       - mysql-data:/var/lib/mysql
     ports:

@@ -64,7 +64,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware', 
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173", 
+    "http://localhost:5173",
+    "http://localhost:5171"
 ]
 
 ROOT_URLCONF = 'arteVivoBackend.urls'
@@ -99,8 +100,8 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'HOST': "localhost",
+        'PORT': '3306',
     }
 }
 
