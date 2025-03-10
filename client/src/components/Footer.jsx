@@ -1,30 +1,32 @@
 import React from 'react'
-import logoImg from "../assets/logowhite.png"
+import './Footer.css' 
+import logo from '../assets/img/logo.png'
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <div style={{display: "flex" ,flexDirection:"row",justifyContent:"space-around",backgroundColor:"#333333", padding:"20px", color:"white"}}>
-
-        <div style={{backgroundColor:"#333333", color:"white"}}>
-          <img src={logoImg} alt="logo artevivo" width="30" />
-          <p style={{color:"rgb(244, 174, 112)" , fontSize:"0.5em"}}>©2025 ArteVivo.  <span style={{color:"white"}}>All rights reserved.</span>Privacy Policy.</p>
+    <div className="footer-container">
+      <div className="logo-container flex-item">
+          <img src={logo} alt="logo artevivo" width="30" />
+          <p className="logo-caption">©2025 ArteVivo.  <span className='logo-span' style={{color: "rgb(244, 174, 112)"}}>All rights reserved.</span>Privacy Policy.</p>
+      </div>
+      <div className='flex-right'>
+        <div className='flex-item'>
+        
+          <Link className="resource-link" to="/">Nosotros</Link>
+          <Link className="resource-link" to="/courses">Cursos</Link>
+          <Link className="resource-link" to="/registerTeacher">Quiero ser Profesor</Link>
+          <Link className="resource-link" to="/register">Quiero aprender</Link>
+        </div>  
+        <div className='flex-item'>
+          <Link className="resource-link" to="/dashboard/pageBooks">Libros</Link>
+          <Link className="resource-link" to="/login">Mi espacio</Link>
+          <Link className="resource-link" to="https://github.com/Nho89/ArteVivo.git">Github</Link>
+        
         </div>
 
-      <div>
-      
-                <Link className="nav-link" to="/dashboard/studentPage" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Nosotros</Link>
-                <Link className="nav-link" to="/dashboard/teacherPage" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Cursos</Link>
-                <Link className="nav-link" to="/dashboard/pageBooks" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Quiero ser Profesor</Link>
       </div>
-
-      <div>
-       <Link className="nav-link" to="/dashboard/teacherPage" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Libros</Link>
-       <Link className="nav-link" to="/dashboard/pageBooks" style={{ color: "rgb(253, 230, 222)", fontSize: "10px", padding: '0 10px' }}>Mis spacio</Link>
-      </div>
-
       
-        
     </div>
   )
 }

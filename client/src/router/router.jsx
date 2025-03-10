@@ -4,17 +4,19 @@ import Register from "../pages/Register";
 import LayoutPublic from "../layout/LayoutPublic";
 import LayoutPrivate from "../layout/LayoutPrivate";
 import Login from "../pages/Login";
-import StudentPage from "../pages/StudentPage";
-import TeacherPage from "../pages/TeacherPage";
 import PageBooks from "../pages/PageBooks";
 import StudentDetails from "../pages/StudentDetails";
-// import ErrorBoundary from './components/ErrorBoundary.jsx'
+import RegisterTeacher from "../pages/RegisterTeacher";
 import CourseDetails from "../pages/CourseDetails";
+import ProfilePage from "../pages/ProfilePage";
+import SuperadminPage from "../pages/SuperadminPage";
+import PageCourses from "../pages/PageCourses";
+
 const router = createBrowserRouter([
     {
         path: "/",
         element: <LayoutPublic/>,
-        // errorElement: <ErrorBoundary/>,
+      
         children: [
             {
                 index: true,
@@ -25,13 +27,22 @@ const router = createBrowserRouter([
                 element: <Register/>
             },
             {
+                path: "/registerTeacher",
+                element: <RegisterTeacher/>
+            },
+            {
                 path: "/login",
                 element: <Login/>
             },
             {
-                path: "/course_details/:courseId",
-                element: <CourseDetails/>
+                path: "/courses",
+                element: <PageCourses/>
             },
+            {
+                path: "course_details/:id",
+                element: <CourseDetails/>
+            }
+            
         ]
     },
     {
@@ -39,12 +50,12 @@ const router = createBrowserRouter([
         element: <LayoutPrivate />,
         children: [
             {
-                path: "studentPage",
-                element: <StudentPage/>
+                path: "profilePage/:id",
+                element: <ProfilePage/>
             },
             {
-                path: "teacherPage",
-                element: <TeacherPage/>
+                path: "superadminPage",
+                element: <SuperadminPage/>
             },
             {
                 path: "pageBooks",
