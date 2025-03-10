@@ -9,12 +9,6 @@ class RoleSerializer(serializers.ModelSerializer):
         model = Role
         fields = '__all__'
 
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password', 'role', 'first_name', 'last_name']
-        extra_kwargs = {'password': {'write_only': True}}   
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,6 +21,7 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class EnrollmentSerializer(serializers.ModelSerializer):
+    course_title = serializers.CharField(source='course.name', read_only=True) 
     class Meta:
         model = Enrollment
         fields = '__all__'
@@ -37,6 +32,7 @@ class CourseBookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudentBookSerializer(serializers.ModelSerializer):
+    book_title = serializers.CharField(source='book.title', read_only=True)
     class Meta:
         model = StudentBook
         fields = '__all__'
@@ -50,7 +46,6 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, data):
         username = data.get("username")
         password = data.get("password")
-
                
         try:
             user = User.objects.get(username=username)
@@ -59,10 +54,9 @@ class LoginSerializer(serializers.Serializer):
         
         if not check_password(password, user.password):
             raise serializers.ValidationError("Invalid username or password")
-        
-        refresh = RefreshToken.for_user(user)
-       
-
+ 
+        refresh = RefreshToken.for_user(user) # Generamos JWT tokens
+      
         return {
              "access": str(refresh.access_token),
              "refresh": str(refresh),
@@ -70,3 +64,20 @@ class LoginSerializer(serializers.Serializer):
              "role_id": user.role.id if user.role else None,
         }
     
+    
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    courses = EnrollmentSerializer(many=True, read_only=True, source='enrollment_set') 
+    books = StudentBookSerializer(many=True, read_only=True, source='studentbook_set')
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password', 'role', 'first_name', 'last_name', 'courses', 'books']
+        extra_kwargs = {'password': {'write_only': True}}
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password']) 
+        return super().create(validated_data)   
+    
+    def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
+        return super(UserSerializer, self).update(instance, validated_data)

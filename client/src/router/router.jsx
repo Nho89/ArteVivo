@@ -10,6 +10,8 @@ import RegisterTeacher from "../pages/RegisterTeacher";
 import CourseDetails from "../pages/CourseDetails";
 import ProfilePage from "../pages/ProfilePage";
 import SuperadminPage from "../pages/SuperadminPage";
+import PageCourses from "../pages/PageCourses";
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -33,7 +35,11 @@ const router = createBrowserRouter([
                 element: <Login/>
             },
             {
-                path: "/course_details/:id",
+                path: "/courses",
+                element: <PageCourses/>
+            },
+            {
+                path: "course_details/:id",
                 element: <CourseDetails/>
             }
             

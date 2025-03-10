@@ -14,6 +14,7 @@
     justify-content: center;
     height: auto;
     min-height: 73vh;
+    padding: 40px 0 50px;
 }
 
 .titleForm{
@@ -55,7 +56,7 @@
 }
 
 .input-group label {
-    font-size: 20px;
+    font-size: 15px;
     color: #1F2124;
     font-weight: bold;
 }

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Course from "../components/Course";  
 import { getCourses } from "../services/courseServices";
+import "./Home.css";
+import AcademySection from "../components/AcademySection";
+import Header from "../components/Header";
+import { Link } from 'react-router-dom';
 export default function Home() {
     const [courses, setCourses] = useState([]);
     const [error, setError] = useState(null);
@@ -31,14 +35,32 @@ export default function Home() {
     }
 
     return (
-        <div className="container">
-            <h1 className="text-center mt-4">Available Courses</h1>
-            <div className="row d-flex flex-wrap justify-content-start">
-                {courses.map(course => (
-                    <div key={course.id} className="col-md-4 mb-4">
-                        <Course img={course.img} name={course.name} description={course.description} id={course.id} />
-                    </div>
-                ))}
+        <div className="home-container">
+            <img src="https://res.cloudinary.com/artevivo/image/upload/v1741366210/Group_50_ts4z1q.png" alt="Banner" className="banner-img" />
+
+            <AcademySection />
+            <div className="container d-flex flex-column align-items-center main-container">
+                {/* <h3 className="text-center main-title">Available Courses</h3> */}
+                <div className="row w-100">
+                {courses.map((course, index) => (
+                        <div 
+                            key={course.id} 
+                            className={`col-md-12 mb-4 d-flex ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`} 
+                            style={{ alignItems: "center" , gap:"30px"}}
+                        >
+                            <div className="course-img-container">
+                                <img src={course.url} className="img-fluid course-img" alt={course.name} />
+                            </div>
+                            <div style={{ width: "50%", padding: "10px" }}>
+                                <h5 className="course-title">{course.name}</h5>
+                                <p className="description-paraf">{course.description}</p>
+                                <Link className="link-btn" to={`/course_details/${course.id}`}>
+                                    Ver más →
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

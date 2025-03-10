@@ -13,16 +13,14 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (data) => {
-    console.log("Datos enviados:", data); 
     try {
       setIsLoading(true);
       setLoginError('');
 
       const response = await login(data);
-      console.log('se pasa la data',response);
 
       if (response) {
-        localStorage.setItem('token', response.access);//guardar el token
+        localStorage.setItem('token', response.access);
         localStorage.setItem('role', response.role_id);
         localStorage.setItem('user_id', response.user_id);
 
@@ -30,20 +28,16 @@ const Login = () => {
         setUser(response.user_id);
         setUserRole(response.role_id);
 
-        console.log("Rol recibido:", response.role_id);
-        setIsLoading(false);
-
-        if (response.role_id === 1 || response.role_id === 2){
-          navigate(`/dashboard/profilePage/${response.user_id}`);
-        } else if (response.role_id === 3){
-          console.log("Redirigiendo a Superadmin...");
-          navigate('/dashboard/superadminPage');
+        if (response.role_id === 3) {
+                    navigate(`/dashboard/superadminPage`);
+                } else {
+                    navigate(`/dashboard/profilePage/${response.user_id}`);
+                }
+          }
+        } catch (error) {
+            setLoginError(error.response?.data?.error || 'Error al iniciar sesión');
+            setIsLoading(false);
         }
-      }
-    } catch (error) {
-      setLoginError(error.response?.data?.error || 'Error al iniciar sesión');
-      setIsLoading(false);
-    }
   };
 
   return (

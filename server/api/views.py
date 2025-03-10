@@ -33,8 +33,15 @@ class BookViewSet(viewsets.ModelViewSet):
     def update_availability(self, request, pk=None):
         try:
             book = self.get_object()
-            new_availability = request.data.get("quanttity_available")
-            
+            print(f"Libro con ID: (id: {book.id}) encontrado")
+            new_availability = request.data.get("quantity_available")  
+            try:
+                new_availability = int(new_availability)
+            except (ValueError, TypeError):
+                return Response(
+                    {"message": "La disponibilidad debe ser un número entero"},
+                    status=status.HTTP_400_BAD_REQUEST
+            )
             if new_availability is not None and isinstance(new_availability, int):
                 if new_availability >= 0:
                     book.quantity_available = new_availability
@@ -53,7 +60,6 @@ class BookViewSet(viewsets.ModelViewSet):
                     )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
     queryset = Enrollment.objects.all()
@@ -85,14 +91,14 @@ class StudentBookViewSet(viewsets.ModelViewSet):
     queryset = StudentBook.objects.all()
     serializer_class = StudentBookSerializer
 
-class LoginAPIView(APIView):
-    def post(self, request):
+# class LoginAPIView(APIView):
+#     def post(self, request):
        
-        serializer = LoginSerializer(data=request.data) 
-        if serializer.is_valid():
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer = LoginSerializer(data=request.data) 
+#         if serializer.is_valid():
+#             return Response(serializer.validated_data, status=status.HTTP_200_OK)
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 
@@ -178,7 +184,7 @@ def delete_course(request, id):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def get_all_books(request):
     books = Book.objects.all()
     serializer = BookSerializer(books, many=True)
@@ -194,7 +200,7 @@ def create_book(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_book(request, id):
     book = get_object_or_404(Book, pk=id)
     serializer = BookSerializer(book, data=request.data, partial=True)
