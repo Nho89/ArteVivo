@@ -1,0 +1,126 @@
+.profile-page {
+    padding: 20px;
+    margin-bottom: 10%;
+}
+
+.greeting {
+    margin-bottom: 20px;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.student-profile {
+    margin-bottom: 40px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.data-table th,
+.data-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.data-table th {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.data-table td {
+    background-color: white;
+    color: black;
+}
+.action-button {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+.action-button-unenroll-button{
+    padding: 10px 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 200px;
+    text-align: center;
+}
+.action-button-unenroll-button:hover {
+    background-color: #E69370;
+}
+.action-button:hover {
+    opacity: 0.8;
+}
+.enroll-button {
+    background-color: #FDA285;
+    color: white;
+}
+
+.enroll-button:hover {
+    background-color: #E69370;
+}
+
+.unenroll-button {
+    background-color: #FF6F61;
+    color: white;
+}
+.actions-table{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.unenroll-button:hover {
+    background-color: #E55B50;
+}
+
+.submit-task-button {
+    background-color: black;
+    color: white;
+    font-size: 0.8em;
+}
+
+.submit-task-button:hover {
+    background-color: black;
+}
+
+.return-book-button {
+    background-color: black;
+    color: white;
+}
+
+.return-book-button:hover {
+    background-color: black;
+}
+
+.request-book-button {
+    margin-top: 10px;
+    background-color: #ADADAD;
+    color: white;
+    font-size: 18px;
+}
+
+.request-book-button:hover {
+    background-color: #8D8D8D;
+}
+
+.books-table th {
+    background-color: #ADADAD;
+    color: white;
+}
+.logout-button {
+    background-color: #8D8D8D;
+    color: white;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}
