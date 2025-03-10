@@ -200,6 +200,7 @@ const ProfilePage = () => {
                         </>
                     )}
                     {userAuth && (
+                        
                         <button className="action-button logout-button" onClick={handleLogout}>Cerrar Sesión</button>
                     )}
                 </div>
