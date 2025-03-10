@@ -17,8 +17,8 @@ export default function Navbar() {
                     <Link className="nav-link" to="/dashboard/pageBooks">Libros</Link>
                 </div>
             </div>
-        </div>
-    </nav>
+            
+        </nav>
     
     
     

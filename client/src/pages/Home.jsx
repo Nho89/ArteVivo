@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import courseData from "../courseData";  
-import Course from "../components/Course";
-import AcademySection from "../components/AcademySection";
-import Header from "../components/Header";
-
-
-=======
 import React, { useEffect, useState } from 'react';
 import Course from "../components/Course";  
 import { getCourses } from "../services/courseServices";
@@ -13,7 +5,6 @@ import "./Home.css";
 import AcademySection from "../components/AcademySection";
 import Header from "../components/Header";
 import { Link } from 'react-router-dom';
->>>>>>> dev
 export default function Home() {
     const [courses, setCourses] = useState([]);
     const [error, setError] = useState(null);
@@ -73,7 +64,7 @@ export default function Home() {
             </div>
         </div>
 
-        </div>
+        
         
     );
 }
