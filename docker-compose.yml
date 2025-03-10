@@ -18,6 +18,8 @@ services:
       - DB_PORT=3306
     networks:
       - app-network 
+    command: >  
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"  
   
   frontend:
     build:
@@ -25,7 +27,7 @@ services:
       dockerfile: client/Dockerfile
     container_name: react-frontend
     ports:
-      - "3000:3000"
+      - "5171:5173"
     networks:
       - app-network
 
