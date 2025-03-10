@@ -1,8 +1,10 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
+from django.utils import timezone
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
@@ -15,8 +17,38 @@ from .serializers import (
 )
 from rest_framework.authentication import SessionAuthentication
 
+class StudentLoginView(APIView):
+    permission_classes = [permissions.AllowAny]  # Permite a cualquiera intentar loguearse
 
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
 
+        user = authenticate(username=username, password=password)
+
+        if user is None or user.role.name != 'student':
+            return Response({"error": "Credenciales inválidas o no eres un alumno"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "username": user.username,
+            "role": user.role.name
+        })
+
+class StudentLogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()  # Revoca el token de refresh
+            return Response({"message": "Logout exitoso"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": "Token inválido"}, status=status.HTTP_400_BAD_REQUEST)
 
 #Vistas basadas en clases
 class RoleViewSet(viewsets.ModelViewSet):
@@ -26,7 +58,7 @@ class RoleViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SessionAuthentication] #Descomentar si usas Post
     permission_classes = [IsAuthenticated]
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -71,12 +103,49 @@ class BookViewSet(viewsets.ModelViewSet):
                     "borrowed_at": student_book.borrowed_at
                 }, status=200)
             else:
-                return JsonResponse({"message": "No hay copias disponibles"}, status=400)
+                return Response({"message": "No hay copias disponibles"}, status=status.HTTP_400_BAD_REQUEST)
 
         except Book.DoesNotExist:
             return JsonResponse({"message": "Libro no encontrado"}, status=404)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+        
+    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated], authentication_classes=[JWTAuthentication, SessionAuthentication])
+    def return_book(self, request, pk=None):
+        try:
+            book = self.get_object()
+            user = request.user
+
+            if not user:
+                return JsonResponse({"message": "Usuario no autenticado."}, status=401)
+            
+            if user.role.id != 1:  # Verificamos si el usuario tiene el rol de "Alumno"
+                return JsonResponse({"message": "El usuario no tiene permisos para devolver este libro."}, status=403)
+
+            student_book = StudentBook.objects.filter(student=user, book=book, returned_at__isnull=True).first()
+
+            if not student_book:
+                return JsonResponse({"message": "No se encontró el préstamo para este libro."}, status=404)
+
+            student_book.returned_at = timezone.now()
+            student_book.save()
+
+            book.quantity_available += 1
+            book.save()
+
+            return JsonResponse({
+                "message": "Libro devuelto con éxito", 
+                "book_title": book.title,
+                "student": user.username,
+                "returned_at": student_book.returned_at
+            }, status=200)
+
+        except Book.DoesNotExist:
+            return JsonResponse({"message": "Libro no encontrado"}, status=404)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
 
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
@@ -92,12 +161,9 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
             if course_id:
                 course_books = CourseBook.objects.filter(course_id=course_id)
                 for course_book in course_books:
-                    book = course_book.book
-                    if book.quantity_available > 0:
-                        student = request.user
-                        StudentBook.objects.create(student=student, book=book)
-                        book.quantity_available -= 1
-                        book.save()
+                    student = request.user
+                    StudentBook.objects.create(student=student, book=course_book.book, enrollment_id=response.data["id"])
+        
         return response
     
     def destroy(self, request, *args, **kwargs):

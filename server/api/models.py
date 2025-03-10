@@ -70,7 +70,7 @@ class CourseBook(models.Model):
 
 # Préstamo de Libros a Estudiantes
 class StudentBook(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'Alumno'})
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'student'})
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     enrollment = models.ForeignKey(Enrollment, on_delete=models.SET_NULL, null=True, blank=True)
     borrowed_at = models.DateTimeField(auto_now_add=True)

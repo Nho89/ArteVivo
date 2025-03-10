@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RoleViewSet, UserViewSet, CourseViewSet, BookViewSet, EnrollmentViewSet, CourseBookViewSet, StudentBookViewSet, StudentBookByStudentView, ActiveStudentBooksView
+from .views import RoleViewSet, UserViewSet, CourseViewSet, BookViewSet, EnrollmentViewSet, CourseBookViewSet, StudentBookViewSet, StudentBookByStudentView, ActiveStudentBooksView, StudentLoginView, StudentLogoutView
 from .views import LoginAPIView 
 from . import views
 
@@ -25,5 +25,7 @@ urlpatterns = [
     path('api/login/', LoginAPIView.as_view(), name='login'),
     path('api/student-books/<int:user_id>/', StudentBookByStudentView.as_view(), name='student-books-by-student'),
     path('api/student-books/books/<int:user_id>/', ActiveStudentBooksView.as_view(), name='active-student-books'),
+    path('api/student/login/', StudentLoginView.as_view(), name='student-login'),
+    path('api/student/logout/', StudentLogoutView.as_view(), name='student-logout'),
 
 ]
