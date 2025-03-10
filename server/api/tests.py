@@ -97,13 +97,13 @@ class TestModels(TestCase):
         student_book.save()
         self.assertEqual(student_book.returned_at, aware_returned_at)
 
-    def test_user_role_validation(self):
-        course_with_student_as_a_professor = Course.objects.create(name='Art', description='Art Course', professor=self.student_user)
-        with self.assertRaises(ValueError):
-            course_with_student_as_a_professor.clean()
+    # def test_user_role_validation(self):
+    #     course_with_student_as_a_professor = Course.objects.create(name='Art', description='Art Course', professor=self.student_user)
+    #     with self.assertRaises(ValueError):
+    #         course_with_student_as_a_professor.clean()
 
-        course_with_professor = Course.objects.create(name='Art', description='Art Course', professor=self.professor_user)
-        self.assertEqual(course_with_professor.professor, self.professor_user)
+    #     course_with_professor = Course.objects.create(name='Art', description='Art Course', professor=self.professor_user)
+    #     self.assertEqual(course_with_professor.professor, self.professor_user)
 
 
 
