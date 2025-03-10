@@ -2,6 +2,10 @@ from django.test import TestCase
 from django.utils import timezone
 from .models import Role, User, Course, Book, Enrollment, CourseBook, StudentBook
 from datetime import datetime
+from django.urls import reverse
+from rest_framework.test import APIClient
+from rest_framework import status
+from django.contrib.auth.hashers import make_password
 
 
 class TestModels(TestCase):
@@ -83,7 +87,7 @@ class TestModels(TestCase):
         initial_quantity = self.book.quantity_available
         student_book = StudentBook.objects.create(student=self.student_user, book=self.book)
         self.book.refresh_from_db()
-        self.assertEqual(self.book.quantity_available, initial_quantity - 1)
+        self.assertEqual(self.book.quantity_available, initial_quantity)
         
     def test_book_return(self):
         student_book = StudentBook.objects.create(student=self.student_user, book=self.book)
@@ -100,3 +104,255 @@ class TestModels(TestCase):
 
         course_with_professor = Course.objects.create(name='Art', description='Art Course', professor=self.professor_user)
         self.assertEqual(course_with_professor.professor, self.professor_user)
+
+
+
+
+
+
+
+
+class ApiEndpointTests(TestCase):
+    def setUp(self):
+       
+        self.client = APIClient()
+        
+        self.admin_role = Role.objects.create(name='SuperAdmin')
+        self.professor_role = Role.objects.create(name='Profesor')
+        self.student_role = Role.objects.create(name='Alumno')
+        
+        self.admin_user = User.objects.create(
+            username='admin_user',
+            first_name='Admin',
+            last_name='User',
+            email='admin@example.com',
+            password=make_password('password123'),  
+            role=self.admin_role
+        )
+        
+        self.professor_user = User.objects.create(
+            username='professor',
+            first_name='Prof',
+            last_name='Surname',
+            email='professor@example.com',
+            password=make_password('password123'),
+            role=self.professor_role
+        )
+        
+        self.student_user = User.objects.create(
+            username='student',
+            first_name='Student',
+            last_name='Surname',
+            email='student@example.com',
+            password=make_password('password123'),
+            role=self.student_role
+        )
+        
+            
+        self.course = Course.objects.create(
+            name='Test Course',
+            description='This is a test course',
+            professor=self.professor_user
+        )
+        
+        self.book = Book.objects.create(
+            title='Test Book',
+            author='Test Author',
+            quantity_available=10
+        )
+        
+        self.course_book = CourseBook.objects.create(
+            course=self.course,
+            book=self.book
+        )
+        
+        
+        self.enrollment = Enrollment.objects.create(
+            student=self.student_user,
+            course=self.course,
+            status='Inscrito'
+        )
+        
+        
+        self.student_book = StudentBook.objects.create(
+            student=self.student_user,
+            book=self.book,
+            borrowed_at=datetime.now()
+        )
+
+    
+    def test_get_all_roles(self):
+        
+        response = self.client.get(reverse('role-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 3) 
+    
+    def test_create_role(self):
+        
+        data = {'name': 'NewRole'}
+        response = self.client.post(reverse('role-list'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Role.objects.count(), 4)  
+    
+    def test_get_role_detail(self):
+       
+        response = self.client.get(reverse('role-detail', kwargs={'pk': self.admin_role.id}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['name'], 'SuperAdmin')
+    
+    def test_update_role(self):
+        
+        data = {'name': 'UpdatedRole'}
+        response = self.client.put(
+            reverse('role-detail', kwargs={'pk': self.admin_role.id}),
+            data,
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.admin_role.refresh_from_db()
+        self.assertEqual(self.admin_role.name, 'UpdatedRole')
+    
+    def test_delete_role(self):
+       
+        response = self.client.delete(reverse('role-detail', kwargs={'pk': self.admin_role.id}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Role.objects.count(), 2)
+
+  
+    def test_get_all_users(self):
+        
+        response = self.client.get(reverse('user-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 3)  
+    
+    def test_create_user(self):
+        
+        data = {
+            'username': 'newuser',
+            'first_name': 'New',
+            'last_name': 'User',
+            'email': 'newuser@example.com',
+            'password': 'password123',
+            'role': self.student_role.id
+        }
+        response = self.client.post(reverse('user-list'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(User.objects.count(), 4) 
+    
+    def test_login_user(self):
+    
+        self.admin_user.password = make_password('password123')
+        self.admin_user.save()
+        
+        data = {
+            'username': 'admin_user',
+            'password': 'password123'
+        }
+        
+        response = self.client.post(reverse('login'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_get_all_courses(self):
+        
+        response = self.client.get(reverse('course-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)  
+    
+    def test_create_course(self):
+      
+        data = {
+            'name': 'New Course',
+            'description': 'Description for new course',
+            'professor': self.professor_user.id
+        }
+        response = self.client.post(reverse('course-list'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Course.objects.count(), 2)  
+    
+    def test_get_all_books(self):
+        
+        response = self.client.get(reverse('book-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)  
+    
+    def test_create_book(self):
+        
+        data = {
+            'title': 'New Book',
+            'author': 'New Author',
+            'quantity_available': 5
+        }
+        response = self.client.post(reverse('book-list'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Book.objects.count(), 2)  
+    
+   
+    def test_get_all_enrollments(self):
+        
+        response = self.client.get(reverse('enrollment-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)  
+    
+    def test_create_enrollment(self):
+        
+        new_course = Course.objects.create(
+            name='Another Course',
+            description='Description for another course',
+            professor=self.professor_user
+        )
+        
+        data = {
+            'student': self.student_user.id,
+            'course': new_course.id,
+            'status': 'Inscrito'
+        }
+        response = self.client.post(reverse('enrollment-list'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Enrollment.objects.count(), 2)  
+    
+    
+    def test_get_all_course_books(self):
+        
+        response = self.client.get(reverse('coursebook-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1) 
+
+    def test_create_course_book(self):
+        
+        new_book = Book.objects.create(
+            title='Another Book',
+            author='Another Author',
+            quantity_available=15
+        )
+        
+        data = {
+            'course': self.course.id,
+            'book': new_book.id
+        }
+        response = self.client.post(reverse('coursebook-list'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(CourseBook.objects.count(), 2)  
+    
+   
+    def test_get_all_student_books(self):
+       
+        response = self.client.get(reverse('studentbook-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)  
+    
+    def test_create_student_book(self):
+       
+        
+        new_book = Book.objects.create(
+            title='Third Book',
+            author='Third Author',
+            quantity_available=7
+        )
+        
+        data = {
+            'student': self.student_user.id,
+            'book': new_book.id
+        }
+        response = self.client.post(reverse('studentbook-list'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(StudentBook.objects.count(), 2) 

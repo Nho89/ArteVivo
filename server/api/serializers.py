@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import User, Role, Course, Book, Enrollment, CourseBook, StudentBook
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -56,10 +56,12 @@ class LoginSerializer(serializers.Serializer):
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise serializers.ValidationError("Invalid username or password")
-         
-         # Generamos JWT tokens
+        
+        if not check_password(password, user.password):
+            raise serializers.ValidationError("Invalid username or password")
+        
         refresh = RefreshToken.for_user(user)
-        print(f"USUARIO: {user}")
+       
 
         return {
              "access": str(refresh.access_token),
