@@ -36,7 +36,6 @@ class Book(models.Model):
 
 # Inscripciones de Estudiantes a Cursos
 class Enrollment(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'student'})
     STATUS_CHOICES = [
         #Profesores
         ('Pendiente', 'Pendiente'),
@@ -47,7 +46,7 @@ class Enrollment(models.Model):
         ('Aprobado', 'Aprobado'),
         ('No aprobado', 'No aprobado'),
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__name': 'student'})
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Inscrito')
 
@@ -57,6 +56,7 @@ def add_mandatory_books(sender, instance, created, **kwargs):
         course_books = CourseBook.objects.filter(course=instance.course)
         for course_book in course_books:
             StudentBook.objects.create(student=instance.user, book=course_book.book, enrollment=instance,)
+
 
 #Borrar libros obligattorios al borrar inscripciones
 @receiver(post_delete, sender=Enrollment)
